@@ -1,0 +1,23 @@
+﻿@model IEnumerable<AmazonPupSpace.Models.EmployeeDto>
+@{
+    ViewBag.Title = "List";
+}
+
+<h2 class="text-center display-4">List of employees</h2>
+<h5><a class="mb-5 btn btn-primary" href="/Employee/New">New Employee </a></h5>
+<div class="container">
+    <div class="row">
+        @foreach (var employee in Model)
+        {
+            <div class="col-md-4 mt-2 mb-2 ">
+                <div class="card bg-primary-subtle text-center border border-primary-subtle shadow p-3 mb-5 bg-body-tertiary rounded ">
+                    <div class="card-body">
+                        <p><a class="p-3 fs-4 text-primary-emphasis fw-m link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover" href="">@employee.FirstName @employee.LastName</a></p>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+
