@@ -1,0 +1,61 @@
+﻿@model AmazonPupSpace.Models.ViewModels.UpdateEmployee
+@{
+    ViewBag.Title = "Edit";
+}
+
+<h2 class="text-center display-4">Edit Employee</h2>
+<br />
+<div class="container-fluid">
+    <div class="container ">
+        <div class="row">
+            <div class="col-md-6 mx-auto">
+                <form action="/Employee/Update/@Model.SelectedEmployee.EmployeeId" method="POST">
+                    <div style="display:none;">
+                        <label>Employee Id: </label> <input type="number" class="form-control" name="EmployeeId" value="@Model.SelectedEmployee.EmployeeId" />
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">First Name: </label> <input type="text" class="form-control" name="FirstName" value="@Model.SelectedEmployee.FirstName" />
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Last Name: </label> <input type="text" class="form-control" name="LastName" value="@Model.SelectedEmployee.LastName" />
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Hire Date</label> <input type="date" class="form-control" name="HireDate" value="@Model.SelectedEmployee.HireDate.ToString("yyyy-MM-dd")" />
+                    </div>
+                    <div style="display:none;">
+                        <label class="form-label">Previous Department Id</label> <input type="number" class="form-control" name="PreviousDepartmentId" value="@Model.SelectedEmployee.PreviousDepartmentId" />
+                    </div>
+                   
+
+                    <div class="mb-3">
+                        <label class="form-label">Department</label>
+                        <select class="form-select" name="DepartmentId">
+                            @foreach (var department in Model.DepartmentOptions)
+                            {
+                                string selected = "";
+                                if (department.DepartmentId == Model.SelectedEmployee.DepartmentId)
+                                {
+                                    selected = "selected";
+                                }
+                                <option value="@department.DepartmentId" @selected>@department.DepartmentName</option>
+
+                            }
+                        </select>
+
+
+                    </div>
+
+                   
+
+                   
+                    <div class="mb-3">
+                        <input type="submit" class="btn btn-success" value="Update Employee" />
+
+                    </div>
+                    <p class="p-2 text-danger-emphasis bg-danger-subtle border border-danger-subtle rounded-3">Previous DepartmentId: @Model.SelectedEmployee.PreviousDepartmentId</p>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>

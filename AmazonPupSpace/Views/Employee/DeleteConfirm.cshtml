@@ -1,0 +1,15 @@
+﻿@model AmazonPupSpace.Models.EmployeeDto
+@{
+    ViewBag.Title = "DeleteConfirm";
+}
+
+<h2 class="text-center display-4">Are you sure you want to delete this  Employee?</h2>
+<a class="d-inline-flex focus-ring py-1 px-2 text-decoration-none border rounded-2 mb-4" href="/Employee/List">Cancel</a>
+<h2 class="text-center text-danger-emphasis display-6">@Model.FirstName @Model.LastName</h2>
+<div class=" text-center fs-6">Hire Date: @Model.HireDate </div>
+
+<form class="text-center mt-5" action="/Employee/Delete/@Model.EmployeeId" method="POST">
+    <input class="btn btn-danger text-center" type="submit" value="Confirm Delete" />
+
+</form>
+
