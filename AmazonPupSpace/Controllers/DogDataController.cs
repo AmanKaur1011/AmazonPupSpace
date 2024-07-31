@@ -16,6 +16,116 @@ namespace AmazonPupSpace.Controllers
     {
         private ApplicationDbContext db = new ApplicationDbContext();
 
+        /// <summary>
+        /// Returns all dogs in the system.
+        /// </summary>
+        /// <returns>
+        /// HEADER: 200 (OK)
+        /// CONTENT: all dogs in the database,
+        /// </returns>
+        /// <example>
+        /// GET: api/DogData/ListDogs
+        /// </example>
+        [HttpGet]
+        public IEnumerable<DogDto> ListDogs()
+        {
+            List<Dog> Dogs = db.Dogs.ToList();
+            List<DogDto> DogDtos = new List<DogDto>();
+
+            Dogs.ForEach(dog => DogDtos.Add(new DogDto()
+            {
+                DogId = dog.DogId,
+                DogName = dog.DogName,
+                DogAge = dog.DogAge,
+                DogBreed = dog.DogBreed,
+                DogBirthday = dog.DogBirthday,
+                EmployeeId = dog.EmployeeId
+            }));
+
+            return DogDtos;
+        }
+
+
+        /// <summary>
+        /// Returns one dog in the system by id.
+        /// </summary>
+        /// <returns>
+        /// HEADER: 200 (OK)
+        /// CONTENT: one dog in the database,
+        /// </returns>
+        /// <example>
+        /// GET: api/DogData/FindDog/5
+        /// </example>
+
+        [ResponseType(typeof(Dog))]
+        [HttpGet]
+        public IHttpActionResult FindDog(int id)
+        {
+            Dog dog = db.Dogs.Find(id);
+
+            if (dog == null)
+            {
+                return NotFound();
+            }
+            DogDto DogDto = new DogDto()
+            {
+                DogId = dog.DogId,
+                DogName = dog.DogName,
+                DogAge = dog.DogAge,
+                DogBreed = dog.DogBreed,
+                DogBirthday = dog.DogBirthday,
+                EmployeeId = dog.EmployeeId
+            };
+            return Ok(DogDto);
+        }
+
+        /// <summary>
+        ///updatesone dog in the system by id.
+        /// </summary>
+        /// <returns>
+        /// HEADER: 200 (OK)
+        /// CONTENT: update one dog in the database,
+        /// </returns>
+        /// <example>
+        /// PUT: api/DogData/UpdateDog/5
+        /// </example>
+
+        [ResponseType(typeof(void))]
+        [HttpPost]
+        public IHttpActionResult UpdateDog(int id, Dog dog)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            if (id != dog.DogId)
+            {
+                return BadRequest();
+            }
+
+            db.Entry(dog).State = EntityState.Modified;
+
+            try
+            {
+                db.SaveChanges();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!DogExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return StatusCode(HttpStatusCode.NoContent);
+        }
+
+
 
         ///-----------------ListDogsForEmployee-------------------------------------------
         /// <summary>
