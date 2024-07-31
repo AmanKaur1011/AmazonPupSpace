@@ -1,0 +1,33 @@
+﻿
+@{
+    ViewBag.Title = "New";
+}
+
+<h2 class="text-center display-4">Add New Department</h2>
+<a class="d-inline-flex focus-ring py-1 px-2 text-decoration-none border rounded-2 mb-4" href="/Department/List">Go back to List</a>
+
+<div class="container-fluid">
+    <div class="container ">
+        <div class="row">
+            <div class="col-md-6 mx-auto">
+                <form action="/Department/Create" method="POST">
+                    <div class="mb-3">
+                        <label class="form-label">Department Name : </label> <input type="text" class="form-control" name="DepartmentName" />
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Department Manager : </label> <input type="text" class="form-control" name="DepartmentManager" />
+                    </div>
+                    <div style="display:none">
+                        <label class="form-label">Department Id</label> <input type="number" class="form-control" name="DepartmentId" />
+                    </div>
+                    <div class="mb-3">
+                        <input type="submit" value="Add Department" class="btn btn-success" />
+
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+
+</div>

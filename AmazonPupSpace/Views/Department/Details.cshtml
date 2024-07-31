@@ -1,0 +1,48 @@
+﻿@model AmazonPupSpace.Models.ViewModels.DetailsDepartment
+@{
+    ViewBag.Title = "Details";
+}
+<style>
+    .image-overlay {
+        position: relative;
+        bottom: -30px;
+        z-index: 10;
+    }
+</style>
+<h2 class="text-center display-4">Department Details</h2>
+<br />
+<a class="d-inline-flex focus-ring py-1 px-2 text-decoration-none border rounded-2 mb-4" href="/Department/List">Go back to List</a>
+<br />
+<br />
+
+<span>
+    <a class="btn btn-danger me-3" href="/Department/DeleteConfirm/@Model.SelectedDepartment.DepartmentId">Delete Department</a>
+    <a class="btn btn-warning me-3" href="/Department/Edit/@Model.SelectedDepartment.DepartmentId">Update Department</a>
+    <!--image source:https://www.amswagstore.com/images/pins/Peccy600.png-->
+    <img src="~/Content/Images/Peccy600.png" class="rounded float-end image-overlay" alt="Amazon peccy pins Clipart" />
+</span>
+<div class="container-fluid  p-5 d-inline-block text-start text-primary-emphasis bg-primary-subtle border border-primary-subtle rounded-3">
+    <div class="container ">
+        <div class="row justify-content-between align-items-center ">
+            <div class="col">
+                <p class="mb-2 fs-4"><strong>Department Id : </strong>@Model.SelectedDepartment.DepartmentId </p>
+                <p class="mb-2 fs-4"><strong>Department Name : </strong>@Model.SelectedDepartment.DepartmentName </p>
+                <p class="mb-2 fs-4"><strong>Department Manager : </strong>@Model.SelectedDepartment.DepartmentManager </p>
+                <p class="mb-2 fs-4"><strong>No of Employees : </strong>@Model.SelectedDepartment.NoOfEmployees </p>
+            </div>
+            <div class="col">
+                <h3>List of Emplpoyees in this Department</h3>
+                @foreach (var employee in Model.RelatedEmployees)
+                {
+                    <a class=" fs-5 link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover" href="/Employee/Details/@employee.EmployeeId">@employee.FirstName @employee.LastName</a>
+                    <br />
+
+                }
+
+
+            </div>
+
+        </div>
+    </div>
+</div>
+

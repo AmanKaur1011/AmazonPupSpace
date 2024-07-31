@@ -154,6 +154,96 @@ namespace AmazonPupSpace.Controllers
         }
 
 
+        //---------------------------------Associate  Department to an employer------------------------
+
+        /// <summary>
+        /// Changes the current Department of an employee to a new Department i.e changes the current department Id to a new department Id
+        /// </summary>
+        /// <param name="EmployeeId">The employee ID primary key</param>
+        /// <param name="DepartmentId">The Department ID primary key</param>
+        /// <returns>
+        /// HEADER: 200 (OK)
+        /// or
+        /// HEADER: 404 (NOT FOUND)
+        /// </returns>
+        /// <example>
+        /// POST api/EmployeeData/AssociateEmployeeToDepartment/9/1 => changes the current department Id of an employee (employee Id of 9 ) to a Department Id of 1 and returns the status of OK if  the Http request goes as intended
+        /// </example>
+        [System.Web.Http.HttpPost]
+        [System.Web.Http.Route("api/EmployeeData/AssociateEmployeeToDepartment/{EmployeeId}/{DepartmentId}")]
+        //[System.Web.Http.Authorize]
+        public IHttpActionResult AssociateEmployeeToDepartment(int EmployeeId, int DepartmentId)
+        {
+            Debug.WriteLine("EmployeeId" + EmployeeId);
+            // Employee SelectedEmployee = db.Employees.Find(EmployeeId);
+            // Department SelectedDepartment = db.Departments.Find(DepartmentId);
+            Employee SelectedEmployee = db.Employees.Where(e => e.EmployeeId == EmployeeId).FirstOrDefault();
+            Department SelectedDepartment = db.Departments.Where(d => d.DepartmentId == DepartmentId).FirstOrDefault();
+            if (SelectedEmployee == null || SelectedDepartment == null)
+            {
+                return NotFound();
+            }
+
+            // Preserve the current Department id into the  PreviousDepartmentId column before changing it
+
+            SelectedEmployee.PreviousDepartmentId = SelectedEmployee.DepartmentId;
+            Debug.WriteLine("PreviousDepartmentId" + SelectedEmployee.PreviousDepartmentId);
+
+            //changes the Department Id of an employee to the new Department Id
+            SelectedEmployee.DepartmentId = SelectedDepartment.DepartmentId;
+
+            //Save the changes into the database
+            db.SaveChanges();
+
+            return Ok();
+        }
+
+
+        //-----------------Remove Employer from a Department-----------------------------------------
+
+        /// <summary>
+        /// Changes the current Department of an employee to it's previous Department i.e changes the current department Id to it's previous department Id
+        /// </summary>
+        /// <param name="EmployeeId">The employee ID primary key</param>
+        /// <returns>
+        /// HEADER: 200 (OK)
+        /// or
+        /// HEADER: 404 (NOT FOUND)
+        /// </returns>
+        /// <example>
+        /// POST api/EmployeeData/UnAssociateEmployeeToDepartment/9 => changes the current department Id of an employee (employee Id of 9 ) to it's Previous  Department Id  preserved in the PreviousDepartmentId Coulmn before editing the employee or
+        /// before associating it to a new department and returns the status of OK if  the Http request goes as intended
+        /// </example>
+        [System.Web.Http.HttpPost]
+        [System.Web.Http.Route("api/EmployeeData/UnAssociateEmployeeToDepartment/{EmployeeId}")]
+        //[System.Web.Http.Authorize]
+        public IHttpActionResult UnAssociateEmployeeToDepartment(int EmployeeId)
+        {
+            Debug.WriteLine("EmployeeId" + EmployeeId);
+
+            Employee SelectedEmployee = db.Employees.Where(e => e.EmployeeId == EmployeeId).FirstOrDefault();
+
+            Debug.WriteLine("PreviousDepartmentId" + SelectedEmployee.PreviousDepartmentId);
+            int departId = SelectedEmployee.PreviousDepartmentId;
+            Debug.WriteLine("DepartId" + departId);
+            Department SelectedDepartment = db.Departments.Where(d => d.DepartmentId == departId).FirstOrDefault();
+
+
+            if (SelectedEmployee == null)
+            {
+                return NotFound();
+            }
+
+            //changes the current Department Id to it's previous Department Id 
+            SelectedEmployee.DepartmentId = SelectedDepartment.DepartmentId;
+
+            //Save the changes into the database
+            db.SaveChanges();
+
+            return Ok();
+        }
+
+
         /// <summary>
         /// This method provides/fetch  the information about a particular employee from the database
         /// </summary>

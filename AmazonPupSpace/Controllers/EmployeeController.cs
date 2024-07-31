@@ -67,11 +67,14 @@ namespace AmazonPupSpace.Controllers
         /// <example>  GET: Employee/Details/5 => Details View( The details of a requested employee)
         /// </example>
 
-       
 
+
+        // GET: /Details/5
         [HttpGet]
         public ActionResult Details(int id)
         {
+            // fetching an information about the particular Employee
+            DetailsEmployee ViewModel = new DetailsEmployee();
             string url = "EmployeeData/FindEmployee/" + id;
             HttpResponseMessage response = client.GetAsync(url).Result;
 
@@ -81,11 +84,18 @@ namespace AmazonPupSpace.Controllers
             EmployeeDto selectedEmployee = response.Content.ReadAsAsync<EmployeeDto>().Result;
             Debug.WriteLine("employee received : ");
             Debug.WriteLine(selectedEmployee.FirstName);
+            ViewModel.SelectedEmployee = selectedEmployee;
+
+            //showcase information about  dogs related to this employee
+            url = "DogData/ListDogsForEmployee/" + id;
+            response = client.GetAsync(url).Result;
+            IEnumerable<DogDto> relatedDogs = response.Content.ReadAsAsync<IEnumerable<DogDto>>().Result;
+            ViewModel.RelatedDogs = relatedDogs;
 
 
 
 
-            return View(selectedEmployee);
+            return View(ViewModel);
         }
 
 
