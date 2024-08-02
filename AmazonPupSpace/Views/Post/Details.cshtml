@@ -1,0 +1,88 @@
+﻿﻿@model AmazonPupSpace.Models.ViewModels.PostDetailsViewModel
+@{
+    ViewBag.Title = "Details";
+}
+
+<a href="/Post/List" class="btn btn-lg btn-info mb-4"><i class="fa-solid fa-chevron-left p-2 me-2"></i>Go back to list</a>
+
+<article>
+    <div class="p-4 rounded-2" style="background-color: #f5f5f5;">
+        <div class="row">
+            <div class="post-info col-12 col-md-6 col-lg-7">
+                <h2>@Model.Post.Title</h2>
+                <p><strong>Description:</strong><br /> @Model.Post.Caption</p>
+                <p><strong>Year Installed:</strong> @Model.Post.PostDate.ToString("yyyy")</p>
+                @if (User.Identity.IsAuthenticated)
+                {
+                    <div class="d-flex align-items-center">
+                        <a href="/Post/Edit/@Model.Post.PostId" class="btn btn-warning me-2 mb-2">Update</a>
+                        <a href="/Post/DeleteConfirm/@Model.Post.PostId" class="btn btn-danger mb-2">Delete</a>
+                    </div>
+                }
+            </div>
+            <div class="post-image col-12 col-md-6 col-lg-5 mt-4 mt-md-0">
+                @{
+                    string imageurl = "/Content/Images/Posts/default.jpg";
+                    if (Model.Post.ImageURL)
+                    {
+                        imageurl = "/Content/Images/Posts/" + Model.Post.PostId + "." + Model.Post.PicExtension;
+                    }
+                }
+                <img class="img-fluid rounded-2" src="@imageurl" alt="@Model.Post.Title" />
+            </div>
+        </div>
+    </div>
+
+    <div class="comment-block mt-50">
+        <h3 class="mb-4"><strong class="count"></strong> Comments</h3>
+        <div class="comment-list row mb-50">
+            @if (Model.Comments != null && Model.Comments.Any())
+            {
+                foreach (var comment in Model.Comments)
+                {
+                    <div class="comment col-md-6 mb-4">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="d-md-flex justify-content-between">
+                                    <div>
+                                        <h5 class="card-title">@comment.FirstName @comment.LastName</h5>
+                                        <h6 class="card-subtitle mb-4 text-body-secondary"><small><i class="fa-regular fa-calendar-days me-2"></i> @comment.DateCommented</small></h6>
+                                    </div>
+                                </div>
+                                <p class="card-text">@comment.CommentText</p>
+                                <a href="/User/Details/@comment.EmployeeId" class="btn btn-secondary mt-2 me-2 mb-3 mb-sm-0">Show User Details</a>
+                                @if (User.Identity.IsAuthenticated)
+                                {
+                                    <a href="/Comment/DeleteConfirm/@comment.CommentId" class="btn btn-outline-danger mt-2">Delete Comment</a>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+            else
+            {
+                <p>No comments yet.</p>
+            }
+        </div>
+
+        <h3 class="mb-4">Leave a Comment</h3>
+        @if (User.Identity.IsAuthenticated)
+        {
+            <form method="post" action="/Comment/Create" class="col-md-7">
+                @Html.AntiForgeryToken()
+                <input type="hidden" name="ArtID" value="@Model.Post.PostId" />
+                <input type="hidden" name="UserID" value="@Model.EmployeeId" /> <!-- UserID as int -->
+                <div class="form-group">
+                    <label for="CommentText" class="mb-2">Your Comment:</label>
+                    <textarea class="form-control" name="CommentText" rows="5" required></textarea>
+                </div>
+                <button type="submit" class="btn btn-secondary my-4">Submit</button>
+            </form>
+        }
+        else
+        {
+            <p>Please <strong><a href="/Account/Login">log in</a></strong> to leave a comment.</p>
+        }
+    </div>
+</article>

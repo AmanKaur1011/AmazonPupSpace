@@ -92,9 +92,6 @@ namespace AmazonPupSpace.Controllers
             IEnumerable<DogDto> relatedDogs = response.Content.ReadAsAsync<IEnumerable<DogDto>>().Result;
             ViewModel.RelatedDogs = relatedDogs;
 
-
-
-
             return View(ViewModel);
         }
 

@@ -1,0 +1,49 @@
+﻿﻿@model AmazonPupSpace.Models.CommentDto
+
+@{
+    ViewBag.Title = "Edit";
+}
+
+<h2 class="mb-4">Update Comment</h2>
+
+<div class="row">
+    <div class="col-md-6 mb-4 mb-md-0">
+        <h3 class="mb-3">@Model.Title</h3>
+        @{
+            string imageurl = "/Content/Images/Posts/default.jpg";
+            if (Model.ImageURL)
+            {
+                imageurl = "/Content/Images/Posts/" + Model.PostId + "." + Model.PicExtension;
+            }
+        }
+        <img class="img-fluid rounded-2" src="@imageurl" alt="@Model.Title" />
+    </div>
+    <div class="col-md-6 ps-md-4 pt-md-5">
+        <form action="/Comment/Update/@Model.CommentId" method="POST">
+            <div style="display:none;">
+                <input type="text" name="CommentId" value="@Model.CommentId" />
+            </div>
+            <div class="form-group mb-3">
+                <label class="mb-2" for="CommentText">Comment:</label>
+                <textarea class="form-control" id="CommentText" name="CommentText" value="@Model.CommentText" rows="5" required>@Model.CommentText</textarea>
+            </div>
+            <div class="form-group mb-3 d-none">
+                <label class="mb-2" for="DateCommented">Date Commented</label>
+                <input type="date" class="form-control" id="DateCommented" name="DateCommented" required />
+            </div>
+            <div class="form-group mb-3 d-none">
+                <input type="number" class="form-control" id="PostId" name="PostId" value="@Model.PostId" readonly />
+            </div>
+            <div class="form-group mb-3 d-none">
+                <input type="number" class="form-control" id="EmployeeId" name="EmployeeId" value="@Model.EmployeeId" readonly />
+            </div>
+            <div>
+                <input type="submit" value="Update Comment" class="btn btn-warning" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    document.getElementById("DateCommented").valueAsDate = new Date();
+</script>

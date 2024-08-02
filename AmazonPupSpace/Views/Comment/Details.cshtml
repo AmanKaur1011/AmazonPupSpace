@@ -1,0 +1,32 @@
+﻿﻿@model AmazonPupSpace.Models.CommentDto
+@{
+    ViewBag.Title = "Details";
+}
+
+<a href="/Comment/List" class="btn btn-lg btn-info mb-4"><i class="fa-solid fa-chevron-left p-2 me-2"></i>Go back to list</a>
+
+<div class="p-4 rounded-2" style="background-color: #f5f5f5;">
+    <div class="row">
+        <div class="art-image col-12 col-md-6 col-lg-5 mt-4 mt-md-0">
+            @{
+                string imageurl = "/Content/Images/Posts/default.jpg";
+                if (Model.ImageURL)
+                {
+                    imageurl = "/Content/Images/Posts/" + Model.PostId + "." + Model.PicExtension;
+                }
+            }
+            <img class="img-fluid rounded-2" src="@imageurl" alt="@Model.Title" />
+        </div>
+        <div class="art-info col-12 col-md-6 col-lg-7">
+            <h2>@Model.Title</h2>
+            <p>@Model.Caption</p>
+            <p><strong>Commented by:</strong> @Model.FirstName @Model.LastName</p>
+            <p><strong>Commented on:</strong> @Model.DateCommented</p>
+            <p>@Model.CommentText</p>
+            <div class="d-flex align-items-center">
+                <a href="/Comment/Edit/@Model.CommentId" class="btn btn-warning me-2 mb-2">Update</a>
+                <a href="/Comment/DeleteConfirm/@Model.CommentId" class="btn btn-danger mb-2">Delete</a>
+            </div>
+        </div>
+    </div>
+</div>

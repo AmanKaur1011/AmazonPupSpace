@@ -25,9 +25,22 @@ namespace AmazonPupSpace.Models
 
         [ForeignKey("Employee")]
         public int EmployeeId { get; set; }
-        public virtual Employee Employee { get; set; }
-        
-      
+        public virtual Employee Employee { get; set; }    
+
+    }
+
+    public class PostDto
+    {
+        public int PostId { get; set; }
+
+        public string Title { get; set; }
+
+        public string Caption { get; set; }
+        public bool ImageURL { get; set; }
+        public string PicExtension { get; set; }
+
+        public DateTime PostDate { get; set; }
+        public int EmployeeId { get; set; }
 
     }
 }

@@ -1,0 +1,32 @@
+﻿﻿
+@{
+    ViewBag.Title = "New";
+}
+
+<h2 class="mb-4">Add new Post</h2>
+
+<form action="/Post/Create" method="post" class="row">
+    <div class="form-group col-md-6 mb-3">
+        <label for="Title">Title</label>
+        <input type="text" class="form-control" id="Title" name="Title" required />
+    </div>
+    <div class="form-group col-12 mb-3">
+        <label for="Caption">Caption</label>
+        <textarea class="form-control" id="Caption" name="Caption" rows="5" required></textarea>
+    </div>
+    <div class="form-group col-md-6 mb-3 d-none">
+        <label for="ImageFile">Upload Image</label>
+        <input type="file" class="form-control" id="ImageFile" name="ImageURL" accept="image/gif, image/jpeg, image/jpg, image/png" />
+    </div>
+    <div class="form-group col-md-3 mb-3">
+        <label for="PostDate">Year Installed</label>
+        <input type="date" class="form-control" id="PostDate" name="PostDate" required />
+    </div>
+    <div class="col-md-5 form-group mb-3">
+        <label class="mb-2" for="EmployeeId">EmployeeId</label>
+        <input type="number" class="form-control" id="EmployeeId" name="EmployeeId" required />
+    </div>
+    <div>
+        <input class="btn btn-secondary" type="submit" value="Add Art" />
+    </div>
+</form>

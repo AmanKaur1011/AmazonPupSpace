@@ -1,0 +1,29 @@
+﻿﻿@model IEnumerable<AmazonPupSpace.Models.CommentDto>
+
+@{
+    ViewBag.Title = "List";
+}
+
+<h2 class="mb-4">List of Comments</h2>
+
+<div class="comment-block mt-50">
+    <h3 class="mb-4"><strong class="count"></strong> Comments</h3>
+    <div class="comment-list row mb-50">
+        @foreach (var comment in Model)
+        {
+            <div class="comment col-md-6 mb-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="card-title"><a href="/Post/Details/@comment.PostId">@comment.Title</a></h4>
+                        <h6 class="card-subtitle mb-4 text-body-secondary">
+                            <small><i class="fa-regular fa-calendar-days me-2"></i> @comment.DateCommented</small>
+                        </h6>
+                        <p class="card-text">@comment.CommentText</p>
+                        <p class="art-artist mb-2"><small><i class="fa-solid fa-user me-2"></i><a href="/Employee/Details/@comment.EmployeeId"><em>@comment.FirstName @comment.LastName</em></a></small></p>
+                        <a href="/Comment/Details/@comment.CommentId" class="btn btn-secondary mt-2 me-2 mb-3 mb-sm-0">View Comment</a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
