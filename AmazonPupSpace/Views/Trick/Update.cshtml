@@ -1,0 +1,33 @@
+﻿@model AmazonPupSpace.Models.TrickDto
+@{
+    ViewBag.Title = "Update";
+}
+
+
+
+<h2>Update Trick: @Model.TrickName</h2>
+
+<form action="/Trick/Edit" method="post">
+    <div class="mb-3">
+        <label class="form-label">Id:</label>
+        <input class="form-control" type="text" name="TrickId" value="@Model.TrickId" />
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Name:</label>
+        <input class="form-control" type="text" name="TrickName" value="@Model.TrickName" />
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Description</label>
+        <input class="form-control" type="text" name="TrickDescription" value="@Model.TrickDescription" />
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Difficulty:</label>
+        <input class="form-control"  type="text" name="TrickDifficulty" value="@Model.TrickDifficulty" />
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Video Link:</label>
+        <input class="form-control" type="text" name="TrickVideoLink" value="@Model.TrickVideoLink" />
+    </div>
+  
+    <input class="btn btn-primary"  type="submit" value="Update Trick" />
+</form>

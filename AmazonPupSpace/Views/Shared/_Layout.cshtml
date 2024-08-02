@@ -18,9 +18,11 @@
             </button>
             <div class="collapse navbar-collapse d-sm-inline-flex justify-content-between">
                 <ul class="navbar-nav flex-grow-1">
-                    <li>@Html.ActionLink("Home", "Index", "Home", new { area = "" }, new { @class = "nav-link" })</li>
-                    <li>@Html.ActionLink("About", "About", "Home", new { area = "" }, new { @class = "nav-link" })</li>
-                    <li>@Html.ActionLink("Contact", "Contact", "Home", new { area = "" }, new { @class = "nav-link" })</li>
+                    <li>@Html.ActionLink("Departments", "List", "Department", new { area = "" }, new { @class = "nav-link" })</li>
+                    <li>@Html.ActionLink("Employees", "List", "Employee", new { area = "" }, new { @class = "nav-link" })</li>
+                    <li>@Html.ActionLink("Dogs", "List", "Dog", new { area = "" }, new { @class = "nav-link" })</li>
+                    <li>@Html.ActionLink("Tricks", "List", "Trick", new { area = "" }, new { @class = "nav-link" })</li>
+                    <li>@Html.ActionLink("Posts", "List", "Post", new { area = "" }, new { @class = "nav-link" })</li>
                 </ul>
                  @Html.Partial("_LoginPartial")
             </div>

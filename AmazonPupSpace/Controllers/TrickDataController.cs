@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
+using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -15,6 +16,8 @@ namespace AmazonPupSpace.Controllers
     public class TrickDataController : ApiController
     {
         private ApplicationDbContext db = new ApplicationDbContext();
+
+
         /// <summary>
         ///grabs all tricks in the database
 
@@ -33,7 +36,7 @@ namespace AmazonPupSpace.Controllers
             List<Trick> Tricks = db.Tricks.ToList();
             List<TrickDto> TrickDtos = new List<TrickDto>();
 
-            Tricks.ForEach( trick => TrickDtos.Add(new TrickDto()
+            Tricks.ForEach(trick => TrickDtos.Add(new TrickDto()
             {
                 TrickId = trick.TrickId,
                 TrickName = trick.TrickName,
@@ -44,54 +47,84 @@ namespace AmazonPupSpace.Controllers
             return TrickDtos;
         }
 
-        [HttpGet]
-        [Route("api/TrickData/ListTricksNotLearnedByDog/{DogId}")]
-        public IEnumerable<TrickDto> ListTricksNotLearnedByDog(int DogId)
-        {
-            // Retrieve all available tricks
-            List<Trick> allTricks = db.Tricks.ToList();
 
-            // Retrieve tricks learned by the specific dog
-            List<int> learnedTrickIds = db.DogxTricks
-                .Where(dt => dt.DogId == DogId)
-                .Select(dt => dt.TrickId)
-                .ToList();
+        /// <summary>
+        ///grabs one trick by id  in the database
+        /// </summary>
+        /// <returns>
+        /// HEADER: 200 (OK)
+        /// CONTENT:one trick
+        /// </returns>
+        /// <example>
+        /// GET: api/TrickData/FindTrick/5
+        /// </example>
 
-            // Find tricks that are not learned by the dog
-            List<Trick> tricksNotLearned = allTricks
-                .Where(trick => !learnedTrickIds.Contains(trick.TrickId))
-                .ToList();
-
-            // Map to DTOs
-            List<TrickDto> trickDtos = tricksNotLearned.Select(trick => new TrickDto
-            {
-                TrickId = trick.TrickId,
-                TrickName = trick.TrickName,
-                TrickDescription = trick.TrickDescription,
-                TrickDifficulty = trick.TrickDifficulty,
-                TrickVideoLink = trick.TrickVideoLink
-            }).ToList();
-
-            return trickDtos;
-        }
-
-
-        // GET: api/TrickData/5
         [ResponseType(typeof(Trick))]
-        public IHttpActionResult GetTrick(int id)
+        [HttpGet]
+        public IHttpActionResult FindTrick(int id)
         {
             Trick trick = db.Tricks.Find(id);
             if (trick == null)
             {
                 return NotFound();
             }
+            TrickDto TrickDto = new TrickDto()
+            {
+                TrickId = trick.TrickId,
+                TrickName = trick.TrickName,
+                TrickDescription = trick.TrickDescription,
+                TrickDifficulty = trick.TrickDifficulty,
+                TrickVideoLink = trick.TrickVideoLink
+            };
 
-            return Ok(trick);
+            return Ok(TrickDto);
         }
 
-        // PUT: api/TrickData/5
+        /// <summary>
+        ///grabs onedogxtrick per trick
+        /// </summary>
+        /// <returns>
+        /// HEADER: 200 (OK)
+        /// CONTENT:one dogxtrick
+        /// </returns>
+        /// <example>
+        /// GET: api/TrickData/ ListTricksforDog/9
+        /// </example>
+
+        [HttpGet]
+        public TrickDto ListTricksforDog(int id)
+        {
+            //all dogs that have dogtricks that match with our id
+            List<Trick> tricks = db.Tricks.Where(trick => trick.Dogs.Any(dogtrick => dogtrick.DogTrickId == id)).ToList();
+            List<TrickDto> TrickDtos = new List<TrickDto>();
+
+            tricks.ForEach(trick => TrickDtos.Add(new TrickDto()
+            {
+                TrickId = trick.TrickId,
+                TrickName = trick.TrickName,
+                TrickDescription = trick.TrickDescription,
+                TrickDifficulty = trick.TrickDifficulty,
+                TrickVideoLink = trick.TrickVideoLink
+            }));
+
+            return TrickDtos.First();
+        }
+
+
+        /// <summary>
+        ///updates oner trick
+        /// </summary>
+        /// <returns>
+        /// HEADER: 200 (OK)
+        /// CONTENT:one trick
+        /// </returns>
+        /// <example>
+        /// PUT: api/TrickData/UpdateTrick/5
+        /// </example>
+
         [ResponseType(typeof(void))]
-        public IHttpActionResult PutTrick(int id, Trick trick)
+        [HttpPost]
+        public IHttpActionResult UpdateTrick(int id, Trick trick)
         {
             if (!ModelState.IsValid)
             {
@@ -124,9 +157,20 @@ namespace AmazonPupSpace.Controllers
             return StatusCode(HttpStatusCode.NoContent);
         }
 
-        // POST: api/TrickData
+        /// <summary>
+        ///adds ones trick
+        /// </summary>
+        /// <returns>
+        /// HEADER: 200 (OK)
+        /// CONTENT:one trick
+        /// </returns>
+        /// <example>
+        /// POST: api/TrickData/AddTrick
+        /// </example>
+
         [ResponseType(typeof(Trick))]
-        public IHttpActionResult PostTrick(Trick trick)
+        [HttpPost]
+        public IHttpActionResult AddTrick(Trick trick)
         {
             if (!ModelState.IsValid)
             {
@@ -139,8 +183,21 @@ namespace AmazonPupSpace.Controllers
             return CreatedAtRoute("DefaultApi", new { id = trick.TrickId }, trick);
         }
 
-        // DELETE: api/TrickData/5
+
+
+        /// <summary>
+        ///adds ones trick
+        /// </summary>
+        /// <returns>
+        /// HEADER: 200 (OK)
+        /// CONTENT:one trick
+        /// </returns>
+        /// <example>
+        ///  DELETE: api/TrickData/DeleteTrick
+        /// </example>
+
         [ResponseType(typeof(Trick))]
+        [HttpPost]
         public IHttpActionResult DeleteTrick(int id)
         {
             Trick trick = db.Tricks.Find(id);

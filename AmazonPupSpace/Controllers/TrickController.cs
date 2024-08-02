@@ -1,24 +1,26 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net.Http;
 using System.Web;
 using System.Web.Mvc;
+using System.Net.Http;
+using AmazonPupSpace.Models;
+using System.Diagnostics;
 using System.Web.Script.Serialization;
 using AmazonPupSpace.Models;
 
-namespace AmazonPupSpace.Controllers
+namespace DogTricksApplication.Controllers
 {
+
     public class TrickController : Controller
     {
-
         private static readonly HttpClient client;
         private JavaScriptSerializer jss = new JavaScriptSerializer();
 
         static TrickController()
         {
             client = new HttpClient();
-            client.BaseAddress = new Uri("https://localhost:44351/api/");
+            client.BaseAddress = new Uri("https://localhost:44351/api/trickdata/");
         }
         // GET: Trick
         public ActionResult List()
@@ -26,7 +28,7 @@ namespace AmazonPupSpace.Controllers
             //communicate with our Trickdata api to retrieve list of tricks
             //curl https://localhost:44351/api/trickdata/listtricks
 
-            string url = "trickdata/listtricks";
+            string url = "listtricks";
             HttpResponseMessage response = client.GetAsync(url).Result;
 
             IEnumerable<TrickDto> tricks = response.Content.ReadAsAsync<IEnumerable<TrickDto>>().Result;
@@ -34,76 +36,124 @@ namespace AmazonPupSpace.Controllers
             return View(tricks);
         }
 
-        // GET: Trick/Details/5
         public ActionResult Details(int id)
         {
-            return View();
+            //communicate with our Trickdata api to retrieve a trick by id
+            //curl https://localhost:44351/api/trickdata/findtrick/9
+
+            string url = "findtrick/" + id;
+            HttpResponseMessage response = client.GetAsync(url).Result;
+            TrickDto selectedTrick = response.Content.ReadAsAsync<TrickDto>().Result;
+
+            return View(selectedTrick);
         }
 
-        // GET: Trick/Create
-        public ActionResult Create()
+        [HttpGet]
+        // GEt: Trick/New
+        public ActionResult New()
         {
             return View();
         }
 
-        // POST: Trick/Create
+        // Post: Trick/Create
         [HttpPost]
-        public ActionResult Create(FormCollection collection)
+        public ActionResult Create(Trick trick)
         {
-            try
-            {
-                // TODO: Add insert logic here
+            //For the mvp, the owner is hardcoded, I will add the trick image and trick owner in later stages after the lessons.
+            //communicate with our Trickdata api to add a trick
+            //curl  -d ""  - "Content-type:application" https://localhost:44351/api/trickdata/AddTrick
 
-                return RedirectToAction("Index");
-            }
-            catch
+            string url = "addtrick";
+
+            string jsonpayload = jss.Serialize(trick);
+
+            HttpContent content = new StringContent(jsonpayload);
+            content.Headers.ContentType.MediaType = "application/json";
+            HttpResponseMessage response = client.PostAsync(url, content).Result;
+
+            if (response.IsSuccessStatusCode)
             {
-                return View();
+                return RedirectToAction("List");
             }
+            else
+            {
+                return RedirectToAction("Error");
+            }
+
+
+        }
+
+        //Get:Trick/Update/5
+        public ActionResult Update(int id)
+        {
+            string url = "findtrick/" + id;
+            HttpResponseMessage response = client.GetAsync(url).Result;
+            TrickDto selectedTrick = response.Content.ReadAsAsync<TrickDto>().Result;
+
+            return View(selectedTrick);
         }
 
         // GET: Trick/Edit/5
-        public ActionResult Edit(int id)
-        {
-            return View();
-        }
-
-        // POST: Trick/Edit/5
         [HttpPost]
-        public ActionResult Edit(int id, FormCollection collection)
+        public ActionResult Edit(Trick trick)
         {
-            try
-            {
-                // TODO: Add update logic here
 
-                return RedirectToAction("Index");
-            }
-            catch
+            string url = "updatetrick/" + trick.TrickId;
+
+            string jsonpayload = jss.Serialize(trick);
+
+            HttpContent content = new StringContent(jsonpayload);
+            content.Headers.ContentType.MediaType = "application/json";
+            HttpResponseMessage response = client.PostAsync(url, content).Result;
+
+
+            if (response.IsSuccessStatusCode)
             {
-                return View();
+                return RedirectToAction("Details/" + trick.TrickId);
             }
+            else
+            {
+                return RedirectToAction("Error");
+            }
+
         }
 
         // GET: Trick/Delete/5
-        public ActionResult Delete(int id)
+        [HttpGet]
+        public ActionResult DeleteConfirm(int id)
         {
-            return View();
+            string url = "findtrick/" + id;
+            HttpResponseMessage response = client.GetAsync(url).Result;
+            TrickDto selectedTrick = response.Content.ReadAsAsync<TrickDto>().Result;
+
+            return View(selectedTrick);
+
         }
 
         // POST: Trick/Delete/5
         [HttpPost]
-        public ActionResult Delete(int id, FormCollection collection)
+        public ActionResult Delete(int id, Trick trick)
         {
             try
             {
                 // TODO: Add delete logic here
+                string url = "deletetrick/" + id;
+                HttpContent content = new StringContent("");
+                content.Headers.ContentType.MediaType = "application/json";
+                HttpResponseMessage response = client.PostAsync(url, content).Result;
 
-                return RedirectToAction("Index");
+                return RedirectToAction("List");
             }
             catch
             {
-                return View();
+                return RedirectToAction("Error");
             }
+        }
+
+
+        public ActionResult Error()
+        {
+            return View();
         }
     }
 }
