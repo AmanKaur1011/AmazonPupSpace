@@ -1,0 +1,16 @@
+﻿﻿@model IEnumerable<AmazonPupSpace.Models.DogDto>
+@{
+    ViewBag.Title = "List";
+}
+<a href="/Dog/New">Add a Pup</a>
+<h2>List of Dogs</h2>
+<ol>
+
+    @foreach (var dog in Model)
+    {
+        <li>
+            <h3><a href="/Dog/Details/@dog.DogId">@dog.DogName</a></h3>
+        </li>
+    }
+</ol>
+

@@ -1,0 +1,13 @@
+﻿﻿﻿@model AmazonPupSpace.Models.DogDto
+@{
+    ViewBag.Title = "DeleteConfirm";
+}
+
+<a href="/Dog/Details/@Model.DogId">Cancel</a>
+
+<h2>Are you sure you want to delete @Model.DogName?</h2>
+<p>This action cannot be undone</p>
+
+<form action="/Dog/Delete/@Model.DogId" method="post">
+    <button type="submit">Confirm Delete</button>
+</form>

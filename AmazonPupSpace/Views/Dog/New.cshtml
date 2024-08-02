@@ -1,0 +1,40 @@
+﻿﻿@model AmazonPupSpace.Models.ViewModels.AddDog
+@{
+    ViewBag.Title = "New";
+}
+
+<h2>Add your Pup</h2>
+<a href="/Dog/List">Cancel</a>
+<form action="/Dog/Create" method="post">
+    <div>
+        <label>Name:</label>
+        <input type="text" name="DogName" />
+    </div>
+    <div>
+        <label>Age (years):</label>
+        <input type="number" name="DogAge" />
+    </div>
+    <div>
+        <label>Breed:</label>
+        <input type="text" name="DogBreed" />
+    </div>
+    <div>
+        <label>Birthday:</label>
+        <input type="date" name="DogBirthday" />
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Owner</label>
+        <select class="form-select" name="EmployeeId">
+            @foreach (var employee in Model.EmployeeOptions)
+            {
+                <option value="@employee.EmployeeId">@employee.FirstName @employee.LastName </option>
+
+            }
+        </select>
+
+
+    
+
+
+    <input type="submit" value="Add your Pup" />
+</form>

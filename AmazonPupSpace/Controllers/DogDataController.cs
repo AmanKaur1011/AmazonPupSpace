@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
+using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -74,11 +75,16 @@ namespace AmazonPupSpace.Controllers
                 DogAge = dog.DogAge,
                 DogBreed = dog.DogBreed,
                 DogBirthday = dog.DogBirthday,
-                EmployeeId = dog.EmployeeId
+                EmployeeId = dog.EmployeeId,
+                FirstName= dog.Employee.FirstName,
+                LastName= dog.Employee.LastName
+
+                
             };
             return Ok(DogDto);
         }
 
+        
         /// <summary>
         ///updatesone dog in the system by id.
         /// </summary>
@@ -169,63 +175,22 @@ namespace AmazonPupSpace.Controllers
             return DogDtos;
         }
 
-        // GET: api/DogData
-        public IQueryable<Dog> GetDogs()
-        {
-            return db.Dogs;
-        }
+        
 
-        // GET: api/DogData/5
+        /// <summary>
+        ///add one dog in the system
+        /// </summary>
+        /// <returns>
+        /// HEADER: 200 (OK)
+        /// CONTENT: add one dog in the database,
+        /// </returns>
+        /// <example>
+        ///POST: api/DogData/AddDog
+        /// </example>
+
         [ResponseType(typeof(Dog))]
-        public IHttpActionResult GetDog(int id)
-        {
-            Dog dog = db.Dogs.Find(id);
-            if (dog == null)
-            {
-                return NotFound();
-            }
-
-            return Ok(dog);
-        }
-
-        // PUT: api/DogData/5
-        [ResponseType(typeof(void))]
-        public IHttpActionResult PutDog(int id, Dog dog)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            if (id != dog.DogId)
-            {
-                return BadRequest();
-            }
-
-            db.Entry(dog).State = EntityState.Modified;
-
-            try
-            {
-                db.SaveChanges();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!DogExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return StatusCode(HttpStatusCode.NoContent);
-        }
-
-        // POST: api/DogData
-        [ResponseType(typeof(Dog))]
-        public IHttpActionResult PostDog(Dog dog)
+        [HttpPost]
+        public IHttpActionResult AddDog(Dog dog)
         {
             if (!ModelState.IsValid)
             {
@@ -237,9 +202,22 @@ namespace AmazonPupSpace.Controllers
 
             return CreatedAtRoute("DefaultApi", new { id = dog.DogId }, dog);
         }
+        
 
-        // DELETE: api/DogData/5
+
+        /// <summary>
+        ///delete one dog in the system
+        /// </summary>
+        /// <returns>
+        /// HEADER: 200 (OK)
+        /// CONTENT: delete one dog in the database,
+        /// </returns>
+        /// <example>
+        ///DELETE: api/DogData/DeleteDog/5
+        /// </example>
+
         [ResponseType(typeof(Dog))]
+        [HttpPost]
         public IHttpActionResult DeleteDog(int id)
         {
             Dog dog = db.Dogs.Find(id);

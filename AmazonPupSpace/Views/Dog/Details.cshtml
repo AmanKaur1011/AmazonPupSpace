@@ -1,0 +1,21 @@
+﻿@model AmazonPupSpace.Models.ViewModels.TricksForDog
+@{
+    ViewBag.Title = "Details";
+}
+<a href="/Dog/Edit/@Model.SelectedDog.DogId" class="navbar-link">Update</a>
+<a href="/Dog/DeleteConfirm/@Model.SelectedDog.DogId" class="navbar-link">Delete</a>
+<a href="/Dog/List">Go back to Dog List</a>
+<h2>@Model.SelectedDog.DogName</h2>
+<p>Age: @Model.SelectedDog.DogAge</p>
+<p>Birthday: @Model.SelectedDog.DogBirthday.ToString("MMMM dd, yyyy")</p>
+<p>Breed: @Model.SelectedDog.DogBreed</p>
+<p> Owner : @Model.SelectedDog.FirstName @Model.SelectedDog.LastName</p>
+
+<h3>Tricks in @Model.SelectedDog.DogName Wheelhouse. </h3>
+@foreach (var trickLearnt in Model.TricksLearnt)
+{
+    <div>
+        <a href="/Trick/Details/@trickLearnt.TrickId">@trickLearnt.TrickName</a>
+    </div>
+}
+

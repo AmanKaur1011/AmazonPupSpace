@@ -1,0 +1,94 @@
+﻿@model AmazonPupSpace.Models.ViewModels.UpdateMyDog
+@{
+    ViewBag.Title = "Edit";
+}
+
+
+<h2>Edit Your Pup</h2>
+
+<form action="/Dog/Update" method="post">
+    <div style="display:none;">
+        <label>Id:</label>
+        <input type="text" name="DogId" value="@Model.SelectedDog.DogId"  />
+    </div>
+    <div>
+        <label>Name:</label>
+        <input type="text" name="DogName" value="@Model.SelectedDog.DogName" />
+    </div>
+    <div>
+        <label>Age (years):</label>
+        <input type="number" name="DogAge" value="@Model.SelectedDog.DogAge" />
+    </div>
+    <div>
+        <label>Breed:</label>
+        <input type="text" name="DogBreed" value="@Model.SelectedDog.DogBreed" />
+    </div>
+    <div>
+        <label>Birthday:</label>
+        <input type="date" name="DogBirthday" value="@Model.SelectedDog.DogBirthday.ToString("yyyy-MM-dd")" />
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Owner</label>
+        <select class="form-select" name="EmployeeId">
+            @foreach (var employee in Model.EmployeeOptions)
+            {
+                string selected = "";
+                if (employee.EmployeeId == Model.SelectedDog.EmployeeId)
+                {
+                    selected = "selected";
+                }
+                <option value="@employee.EmployeeId" @selected>@employee.FirstName @employee.LastName</option>
+
+            }
+        </select>
+
+
+    </div>
+
+    <input type="submit" value="Update your Pup" />
+</form>
+    <div class="col">
+        <div>
+            <h3 class="fw-semibold">List of  Tricks learnt By Dog</h3>
+            @foreach (var trick in Model.TricksLearnt)
+            {
+
+
+
+                <a href="/Trick/Details/@trick.TrickId">@trick.TrickName</a>
+                <form action="/Dog/UnAssociate" method="post" style="display:inline;">
+                    <input type="hidden" name="DogId" value="@Model.SelectedDog.DogId" />
+                    <input type="hidden" name="TrickId" value="@trick.TrickId" />&nbsp;&nbsp;
+                    <button type="submit" style="background-color:red; color:white; border:none; cursor:pointer;">Cancel</button>
+                </form>
+                <br />
+                <br />
+
+            }
+            <br />
+
+
+        </div>
+        <br />
+        <div>
+            <h3 class="fw-semibold">Add  New tricks - @Model.SelectedDog.DogName</h3>
+            <form method="post" action="/Dog/Associate">
+                <input type="hidden" name="DogId" value="@Model.SelectedDog.DogId" />
+                <select name="TrickId">
+                    @foreach (var trick in Model.AvailableTrickOptions)
+                    {
+                        <option value="@trick.TrickId">
+                            @trick.TrickName
+                        </option>
+                        <br />
+
+                    }
+                </select>
+                <input type="submit" value="Add Trick" class="btn btn-success ms-3" style="background-color:orangered; color:white" />
+            </form>
+
+        </div>
+    </div>
+
+
+
