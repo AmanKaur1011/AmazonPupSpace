@@ -381,6 +381,12 @@
     <Content Include="Views\Dog\New.cshtml" />
     <Content Include="Views\Dog\Edit.cshtml" />
     <Content Include="Views\Dog\DeleteConfirm.cshtml" />
+    <Content Include="Views\Trick\DeleteConfirm.cshtml" />
+    <Content Include="Views\Trick\Details.cshtml" />
+    <Content Include="Views\Trick\Error.cshtml" />
+    <Content Include="Views\Trick\List.cshtml" />
+    <Content Include="Views\Trick\New.cshtml" />
+    <Content Include="Views\Trick\Update.cshtml" />
     <Content Include="Views\Post\New.cshtml" />
     <Content Include="Views\Post\List.cshtml" />
     <Content Include="Views\Post\Error.cshtml" />
@@ -397,6 +403,7 @@
   <ItemGroup>
     <Folder Include="Views\Trick\" />
   </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Content Include="Content\bootstrap.rtl.min.css.map" />
     <Content Include="Content\bootstrap.rtl.css.map" />

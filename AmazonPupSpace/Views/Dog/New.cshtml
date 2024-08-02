@@ -3,38 +3,43 @@
     ViewBag.Title = "New";
 }
 
-<h2>Add your Pup</h2>
-<a href="/Dog/List">Cancel</a>
-<form action="/Dog/Create" method="post">
-    <div>
-        <label>Name:</label>
-        <input type="text" name="DogName" />
+<h2  class="text-center display-4">Add your Pup</h2>
+<a class="d-inline-flex focus-ring py-1 px-2 text-decoration-none border rounded-2 mb-4" href="/Employee/List" href="/Dog/List">Cancel</a>
+    <div class="container-fluid">
+        <div class="container ">
+            <div class="row">
+                <div class="col-md-6 mx-auto">
+                    <form action="/Dog/Create" method="post">
+                        <div class="mb-3">
+                            <label class="form-label">Name:</label>
+                            <input  class="form-control" type="text" name="DogName" />
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Age (years):</label>
+                            <input class="form-control" type="number" name="DogAge" />
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Breed:</label>
+                            <input class="form-control" type="text" name="DogBreed" />
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Birthday:</label>
+                            <input class="form-control" type="date" name="DogBirthday" />
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Owner</label>
+                            <select class="form-select" name="EmployeeId">
+                                @foreach (var employee in Model.EmployeeOptions)
+                                {
+                                    <option value="@employee.EmployeeId">@employee.FirstName @employee.LastName </option>
+
+                                }
+                            </select>
+                            </div>
+                            <input type="submit" value="Add your Pup" />
+                    </form>
+
+                </div>
+            </div>
+        </div>
     </div>
-    <div>
-        <label>Age (years):</label>
-        <input type="number" name="DogAge" />
-    </div>
-    <div>
-        <label>Breed:</label>
-        <input type="text" name="DogBreed" />
-    </div>
-    <div>
-        <label>Birthday:</label>
-        <input type="date" name="DogBirthday" />
-    </div>
-    <div class="mb-3">
-        <label class="form-label">Owner</label>
-        <select class="form-select" name="EmployeeId">
-            @foreach (var employee in Model.EmployeeOptions)
-            {
-                <option value="@employee.EmployeeId">@employee.FirstName @employee.LastName </option>
-
-            }
-        </select>
-
-
-    
-
-
-    <input type="submit" value="Add your Pup" />
-</form>

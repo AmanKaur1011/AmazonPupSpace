@@ -7,25 +7,25 @@
 <h2>Edit Your Pup</h2>
 
 <form action="/Dog/Update" method="post">
-    <div style="display:none;">
+    <div class="mb-3" style="display:none;">
         <label>Id:</label>
-        <input type="text" name="DogId" value="@Model.SelectedDog.DogId"  />
+        <input class="form-control" type="text" name="DogId" value="@Model.SelectedDog.DogId" />
     </div>
-    <div>
-        <label>Name:</label>
-        <input type="text" name="DogName" value="@Model.SelectedDog.DogName" />
+    <div class="mb-3">
+        <label class="form-label">Name:</label>
+        <input class="form-control" type="text" name="DogName" value="@Model.SelectedDog.DogName" />
     </div>
-    <div>
-        <label>Age (years):</label>
-        <input type="number" name="DogAge" value="@Model.SelectedDog.DogAge" />
+    <div class="mb-3">
+        <label class="form-label">Age (years):</label>
+        <input class="form-control" type="number" name="DogAge" value="@Model.SelectedDog.DogAge" />
     </div>
-    <div>
-        <label>Breed:</label>
-        <input type="text" name="DogBreed" value="@Model.SelectedDog.DogBreed" />
+    <div class="mb-3">
+        <label class="form-label">Breed:</label>
+        <input class="form-control" type="text" name="DogBreed" value="@Model.SelectedDog.DogBreed" />
     </div>
-    <div>
-        <label>Birthday:</label>
-        <input type="date" name="DogBirthday" value="@Model.SelectedDog.DogBirthday.ToString("yyyy-MM-dd")" />
+    <div class="mb-3">
+        <label class="form-label">Birthday:</label>
+        <input class="form-control" type="date" name="DogBirthday" value="@Model.SelectedDog.DogBirthday.ToString("yyyy-MM-dd")" />
     </div>
     <div class="mb-3">
         <label class="form-label">Owner</label>
@@ -41,20 +41,15 @@
 
             }
         </select>
-
-
     </div>
-
     <input type="submit" value="Update your Pup" />
 </form>
+
     <div class="col">
         <div>
             <h3 class="fw-semibold">List of  Tricks learnt By Dog</h3>
             @foreach (var trick in Model.TricksLearnt)
             {
-
-
-
                 <a href="/Trick/Details/@trick.TrickId">@trick.TrickName</a>
                 <form action="/Dog/UnAssociate" method="post" style="display:inline;">
                     <input type="hidden" name="DogId" value="@Model.SelectedDog.DogId" />
@@ -66,8 +61,6 @@
 
             }
             <br />
-
-
         </div>
         <br />
         <div>
@@ -89,6 +82,10 @@
 
         </div>
     </div>
+
+
+
+
 
 
 

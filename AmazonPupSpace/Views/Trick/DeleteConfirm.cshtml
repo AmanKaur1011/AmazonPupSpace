@@ -1,0 +1,13 @@
+﻿﻿@model AmazonPupSpace.Models.TrickDto
+@{
+    ViewBag.Title = "DeleteConfirm";
+}
+
+<a href="/Trick/Details/@Model.TrickId">Cancel</a>
+
+<h2>Are you sure you want to delete @Model.TrickName?</h2>
+<p>This action cannot be undone</p>
+
+<form action="/Trick/Delete/@Model.TrickId" method="post">
+    <button type="submit">Confirm Delete</button>
+</form>

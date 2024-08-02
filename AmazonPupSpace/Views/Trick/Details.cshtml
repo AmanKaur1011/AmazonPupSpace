@@ -1,0 +1,25 @@
+﻿@model AmazonPupSpace.Models.TrickDto
+@{
+    ViewBag.Title = "Details";
+}
+
+@{
+    var formatttedVideoLink = "";
+
+    if (@Model.TrickVideoLink.Contains("youtube")) {
+        formatttedVideoLink = @Model.TrickVideoLink.Replace("watch?v=", "embed/");
+     }
+            else{
+       ;formatttedVideoLink = Model.TrickVideoLink;
+    }
+}
+<a href="/Trick/Update/@Model.TrickId" class="navbar-link">Update</a>
+<a href="/Trick/DeleteConfirm/@Model.TrickId" class="navbar-link">Delete</a>
+<a href="/Trick/List">Go back to Trick List</a>
+<h2>@Model.TrickName</h2>
+<h3>Description</h3>
+<p> @Model.TrickDescription</p>
+<p>difficulty: @Model.TrickDifficulty</p>
+<iframe src="@formatttedVideoLink" width="500" height="300"style="border: 1px solid black;"></iframe>
+
+

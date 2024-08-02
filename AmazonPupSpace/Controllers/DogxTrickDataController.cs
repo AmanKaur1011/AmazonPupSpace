@@ -43,7 +43,6 @@ namespace AmazonPupSpace.Controllers
                 dogtrickdto.DogTrickId = dogtrick.DogTrickId;
                 dogtrickdto.DogTrickDate = dogtrick.DogTrickDate;
                 dogtrickdto.DogId = dogtrick.DogId;
-                dogtrickdto.DogName = dogtrick.Dog.DogName;
                 dogtrickdto.TrickId = dogtrick.TrickId;
                 dogtrickdto.TrickName = dogtrick.Trick.TrickName;
 
@@ -51,6 +50,32 @@ namespace AmazonPupSpace.Controllers
                         
             }
             
+            return DogTrickDtos;
+        }
+
+        [HttpGet]
+        public IEnumerable<DogxTrickDto> ListTricksNotLearnedByDog(int id)
+        {
+            //all dogs that have dogtricks that match with our id
+            List<DogxTrick> DogxTricks = db.DogxTricks.Where(d => d.DogId != id).ToList();
+
+            List<DogxTrickDto> DogTrickDtos = new List<DogxTrickDto>();
+
+            foreach (DogxTrick dogtrick in DogxTricks)
+            {
+                DogxTrickDto dogtrickdto = new DogxTrickDto();
+
+                dogtrickdto.DogTrickId = dogtrick.DogTrickId;
+                dogtrickdto.DogTrickDate = dogtrick.DogTrickDate;
+                dogtrickdto.DogId = dogtrick.DogId;
+                dogtrickdto.DogName = dogtrick.Dog.DogName;
+                dogtrickdto.TrickId = dogtrick.TrickId;
+                dogtrickdto.TrickName = dogtrick.Trick.TrickName;
+
+                DogTrickDtos.Add(dogtrickdto);
+
+            }
+
 
             return DogTrickDtos;
         }

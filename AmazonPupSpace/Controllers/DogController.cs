@@ -8,6 +8,7 @@ using System.Web.Mvc;
 using System.Web.Script.Serialization;
 using AmazonPupSpace.Models;
 using AmazonPupSpace.Models.ViewModels;
+using System.Diagnostics;
 
 namespace AmazonPupSpace.Controllers
 {
@@ -176,9 +177,10 @@ namespace AmazonPupSpace.Controllers
             ViewModel.TricksLearnt = tricksfordog;
 
             // Retrieve the tricks not yet learned by the dog
-            url = "TrickData/ListTricksNotLearnedByDog/"+ id;
+            url = "TrickData/ListTricks";
              response = client.GetAsync(url).Result;
             IEnumerable<TrickDto> trickOptions = response.Content.ReadAsAsync<IEnumerable<TrickDto>>().Result;
+            Debug.WriteLine(trickOptions);
             ViewModel.AvailableTrickOptions = trickOptions;
 
              // Retrieve the list of available employees

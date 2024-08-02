@@ -1,0 +1,16 @@
+﻿@model IEnumerable<AmazonPupSpace.Models.TrickDto>
+@{
+    ViewBag.Title = "List";
+}
+<a href="/Trick/New">Add a Trick</a>
+<h2>List of Tricks</h2>
+<ol>
+
+    @foreach (var trick in Model)
+    {
+    <li>
+        <h3><a href="/Trick/Details/@trick.TrickId">@trick.TrickName</a></h3>
+    </li>
+    }
+</ol>
+
