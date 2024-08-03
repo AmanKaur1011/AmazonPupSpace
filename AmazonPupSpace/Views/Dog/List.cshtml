@@ -2,8 +2,9 @@
 @{
     ViewBag.Title = "List";
 }
-<a href="/Dog/New">Add a Pup</a>
-<h2>List of Dogs</h2>
+
+<h2 class="mb-4">List of Dogs</h2>
+<a href="/Dog/New" class="btn btn-primary mb-4"><i class="fa-solid fa-plus me-2 p-2"></i>Add a Pup</a>
 <ol>
 
     @foreach (var dog in Model)

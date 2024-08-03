@@ -3,10 +3,7 @@
     ViewBag.Title = "Edit";
 }
 
-<h2 class="text-center display-4">Update Department Information</h2>
-<br />
-<div class="container-fluid mt-3">
-    <div class="container ">
+<h2 class="mb-4">Update Department Information</h2>
         <div class="row justify-content-between gap-5">
             <div class="col">
                 <form action="/Department/Update/@Model.SelectedDepartment.DepartmentId" method="POST">
@@ -42,12 +39,12 @@
                     {
                         if (employee.PreviousDepartmentId == 0 || employee.PreviousDepartmentId == employee.DepartmentId)
                         {
-                            <div style="color:dimgrey">@employee.FirstName @employee.LastName <span style="color:black"> - Cannot Cancel </span></div>
+                            <div style="color:dimgrey">@employee.FirstName @employee.LastName <span style="color:black"> - Cannot Remove </span></div>
 
                         }
                         else
                         {
-                            <a href="/Employee/Details/@employee.EmployeeId">@employee.FirstName @employee.LastName</a> <a href="/Department/UnAssociate/@Model.SelectedDepartment.DepartmentId?EmployeeId=@employee.EmployeeId" style="color:red">Cancel</a>
+                            <a href="/Employee/Details/@employee.EmployeeId">@employee.FirstName @employee.LastName</a> <a href="/Department/UnAssociate/@Model.SelectedDepartment.DepartmentId?EmployeeId=@employee.EmployeeId" style="color:red">Remove</a>
                             <br />}
 
                     }
@@ -59,7 +56,7 @@
                 <div>
                     <h3 class="fw-semibold">Add employees to this Department- @Model.SelectedDepartment.DepartmentName</h3>
                     <form method="post" action="/Department/Associate/@Model.SelectedDepartment.DepartmentId">
-                        <select name="EmployeeId">
+                        <select name="EmployeeId" class="form-select">
                             @foreach (var employee in Model.UnrelatedEmployees)
                             {
                                 <option value="@employee.EmployeeId">
@@ -69,12 +66,9 @@
 
                             }
                         </select>
-                        <input type="submit" value="Add Employee" class="btn btn-success ms-3" style="background-color:orangered; color:white" />
+                        <input type="submit" value="Add Employee" class="btn btn-success mt-3" style="background-color:orangered; color:white" />
                     </form>
 
                 </div>
             </div>
         </div>
-    </div>
-</div>
-

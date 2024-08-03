@@ -3,13 +3,14 @@
     ViewBag.Title = "DeleteConfirm";
 }
 
-<h2 class="text-center display-4">Are you sure you want to delete this Department?</h2>
-<a class="d-inline-flex focus-ring py-1 px-2 text-decoration-none border rounded-2 mb-4" href="/Department/List">Cancel</a>
+<h2 class="text-center mb-3">Are you sure you want to delete this Department?</h2>
 <h2 class="text-center text-danger-emphasis display-6">@Model.DepartmentName :Id - @Model.DepartmentId</h2>
-<div class=" text-center fs-6">Department Manager: @Model.DepartmentManager </div>
+<div class=" text-center fs-6">Department Manager: @Model.DepartmentManager</div>
 
-<form class="text-center mt-5" action="/Department/Delete/@Model.DepartmentId" method="POST">
-    <input type="submit" class="btn btn-danger text-center" value="Confirm Delete" />
-
-</form>
+<div class="d-flex align-items-center justify-content-center mt-4">
+    <a href="/Post/List" class="btn btn-danger  me-2 mb-2">Cancel</a>
+    <form action="/Department/Delete/@Model.DepartmentId" method="POST">
+        <input class="btn btn-success mb-2" type="submit" value="Confirm Delete" />
+    </form>
+</div>
 

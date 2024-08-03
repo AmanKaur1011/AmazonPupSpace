@@ -2,8 +2,9 @@
 @{
     ViewBag.Title = "List";
 }
-<a href="/Trick/New">Add a Trick</a>
-<h2>List of Tricks</h2>
+
+<h2 class="mb-4">List of Tricks</h2>
+<a href="/Trick/New" class="btn btn-primary mb-4"><i class="fa-solid fa-plus me-2 p-2"></i>New Trick</a>
 <ol>
 
     @foreach (var trick in Model)

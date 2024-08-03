@@ -9,15 +9,14 @@
         z-index: 10;
     }
 </style>
-<h2 class="text-center display-4">Department Details</h2>
-<br />
-<a class="d-inline-flex focus-ring py-1 px-2 text-decoration-none border rounded-2 mb-4" href="/Department/List">Go back to List</a>
-<br />
-<br />
+<h2 class="mb-4">Department Details</h2>
+<a href="/Department/List" class="btn btn-lg btn-info mb-4"><i class="fa-solid fa-chevron-left p-2 me-2"></i>Go back to list</a>
 
-<span>
-    <a class="btn btn-danger me-3" href="/Department/DeleteConfirm/@Model.SelectedDepartment.DepartmentId">Delete Department</a>
-    <a class="btn btn-warning me-3" href="/Department/Edit/@Model.SelectedDepartment.DepartmentId">Update Department</a>
+<span class="d-flex align-items-end justify-content-between">
+    <div>
+        <a class="btn btn-danger me-3 mb-3" href="/Department/DeleteConfirm/@Model.SelectedDepartment.DepartmentId">Delete Department</a>
+        <a class="btn btn-warning me-3 mb-3" href="/Department/Edit/@Model.SelectedDepartment.DepartmentId">Update Department</a>
+    </div>
     <!--image source:https://www.amswagstore.com/images/pins/Peccy600.png-->
     <img src="~/Content/Images/Peccy600.png" class="rounded float-end image-overlay" alt="Amazon peccy pins Clipart" />
 </span>

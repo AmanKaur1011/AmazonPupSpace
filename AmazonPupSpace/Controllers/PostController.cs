@@ -9,6 +9,7 @@ using System.Web.Mvc;
 using System.Web.Script.Serialization;
 using System.Web.UI.WebControls.WebParts;
 using AmazonPupSpace.Models.ViewModels;
+using Microsoft.AspNet.Identity;
 
 namespace AmazonPupSpace.Controllers
 {
@@ -93,38 +94,60 @@ namespace AmazonPupSpace.Controllers
             return View();
         }
 
-        // GET: Art/New
+        // GET: Post/New
         public ActionResult New()
         {
+            // Get the current user's ID
+            string userId = User.Identity.GetUserId();
+
+            // Fetch employee details using the user ID if needed
+            var employee = db.Employees.FirstOrDefault(e => e.UserId == userId);
+
+            // Pass the employee ID to the view
+            ViewBag.EmployeeId = employee?.EmployeeId;
+
             return View();
         }
 
-        // GET: Post/Create
+
+        // POST: Post/Create
+        [HttpPost]
         public ActionResult Create(Post post)
         {
+            // Ensure that the EmployeeId is set
+            if (string.IsNullOrEmpty(Request.Form["EmployeeId"]) || !int.TryParse(Request.Form["EmployeeId"], out int employeeId))
+            {
+                // Handle the error or redirect if EmployeeId is not set
+                return RedirectToAction("Error"); // Or any other appropriate action
+            }
+
+            post.EmployeeId = employeeId;
+
             string url = "postdata/addpost";
 
-            // Serialize the post object to JSON format.
+            // Serialize the post object to JSON format
             string jsonpayload = jss.Serialize(post);
             Debug.WriteLine(jsonpayload);
 
-            // Create a new HttpContent object for the JSON payload.
+            // Create a new HttpContent object for the JSON payload
             HttpContent content = new StringContent(jsonpayload);
             content.Headers.ContentType.MediaType = "application/json";
 
-            // Send the POST request to the API endpoint.
+            // Send the POST request to the API endpoint
             HttpResponseMessage response = client.PostAsync(url, content).Result;
+
             if (response.IsSuccessStatusCode)
             {
-                // If the request is successful, redirect to the post list.
+                // If the request is successful, redirect to the post list
                 return RedirectToAction("List");
             }
             else
             {
-                // If the request fails, redirect to the error view.
+                // If the request fails, redirect to the error view
                 return RedirectToAction("Error");
             }
         }
+
 
         // GET: Post/Edit/5
         public ActionResult Edit(int id)

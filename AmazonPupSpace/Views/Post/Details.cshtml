@@ -10,10 +10,9 @@
         <div class="row">
             <div class="post-info col-12 col-md-6 col-lg-7">
                 <h2>@Model.Post.Title</h2>
-                <p><strong>Description:</strong><br /> @Model.Post.Caption</p>
-                <p><strong>EmployeeID:</strong><br /> @Model.Post.EmployeeId</p>
                 <h3>Posted by: @Model.Employee.FirstName @Model.Employee.LastName</h3>
-                <p><strong>Year Installed:</strong> @Model.Post.PostDate.ToString("yyyy")</p>
+                <p><strong>Caption:</strong><br /> @Model.Post.Caption</p>
+                <p><strong>Post Date:</strong> @Model.Post.PostDate.ToString()</p>
                 @if (User.Identity.IsAuthenticated)
                 {
                     <div class="d-flex align-items-center">
@@ -74,7 +73,7 @@
             <form method="post" action="/Comment/Create" class="col-md-7">
                 @Html.AntiForgeryToken()
                 <input type="hidden" name="PostId" value="@Model.Post.PostId" />
-                <input type="hidden" name="" value="@Model.EmployeeId" /> <!-- UserID as int -->
+                <input type="hidden" name="" value="@Model.EmployeeId" />
                 <div class="form-group">
                     <label for="CommentText" class="mb-2">Your Comment:</label>
                     <textarea class="form-control" name="CommentText" rows="5" required></textarea>

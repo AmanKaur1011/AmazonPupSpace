@@ -11,5 +11,7 @@ namespace AmazonPupSpace.Models.ViewModels
         public EmployeeDto SelectedEmployee { get; set; }
 
         public IEnumerable<DogDto> RelatedDogs { get; set; }
+
+        public IEnumerable<PostDto> RelatedPosts { get; set; }
     }
 }

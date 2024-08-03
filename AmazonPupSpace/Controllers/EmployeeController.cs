@@ -73,27 +73,50 @@ namespace AmazonPupSpace.Controllers
         [HttpGet]
         public ActionResult Details(int id)
         {
-            // fetching an information about the particular Employee
-            DetailsEmployee ViewModel = new DetailsEmployee();
-            string url = "EmployeeData/FindEmployee/" + id;
-            HttpResponseMessage response = client.GetAsync(url).Result;
+            DetailsEmployee viewModel = new DetailsEmployee();
 
-            //Debug.WriteLine("The response code is ");
-            //Debug.WriteLine(response.StatusCode);
+            // Fetch employee data
+            string employeeUrl = "employeeData/findemployee/" + id;
+            HttpResponseMessage employeeResponse = client.GetAsync(employeeUrl).Result;
 
-            EmployeeDto selectedEmployee = response.Content.ReadAsAsync<EmployeeDto>().Result;
-            Debug.WriteLine("employee received : ");
-            Debug.WriteLine(selectedEmployee.FirstName);
-            ViewModel.SelectedEmployee = selectedEmployee;
+            if (employeeResponse.IsSuccessStatusCode)
+            {
+                viewModel.SelectedEmployee = employeeResponse.Content.ReadAsAsync<EmployeeDto>().Result;
+            }
+            else
+            {
+                return HttpNotFound("Employee not found.");
+            }
 
-            //showcase information about  dogs related to this employee
-            url = "DogData/ListDogsForEmployee/" + id;
-            response = client.GetAsync(url).Result;
-            IEnumerable<DogDto> relatedDogs = response.Content.ReadAsAsync<IEnumerable<DogDto>>().Result;
-            ViewModel.RelatedDogs = relatedDogs;
+            // Fetch posts related to the employee
+            string postsUrl = "postdata/listpostsbyemployee/" + id; // Ensure this endpoint exists
+            HttpResponseMessage postsResponse = client.GetAsync(postsUrl).Result;
 
-            return View(ViewModel);
+            if (postsResponse.IsSuccessStatusCode)
+            {
+                viewModel.RelatedPosts = postsResponse.Content.ReadAsAsync<IEnumerable<PostDto>>().Result;
+            }
+            else
+            {
+                viewModel.RelatedPosts = new List<PostDto>();
+            }
+
+            // Fetch dogs owned by the employee
+            string dogsUrl = "dogdata/listdogsbyemployee/" + id;
+            HttpResponseMessage dogsResponse = client.GetAsync(dogsUrl).Result;
+
+            if (dogsResponse.IsSuccessStatusCode)
+            {
+                viewModel.RelatedDogs = dogsResponse.Content.ReadAsAsync<IEnumerable<DogDto>>().Result;
+            }
+            else
+            {
+                viewModel.RelatedDogs = new List<DogDto>();
+            }
+
+            return View(viewModel);
         }
+
 
 
         /// <summary>

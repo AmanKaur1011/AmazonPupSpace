@@ -3,21 +3,20 @@
     ViewBag.Title = "List";
 }
 
-<h2 class="text-center display-4">List of employees</h2>
-<h5><a class="mb-5 btn btn-primary" href="/Employee/New">New Employee </a></h5>
-<div class="container">
+<h2 class="mb-4">List of employees</h2>
+<a href="/Employee/New" class="btn btn-primary mb-4"><i class="fa-solid fa-plus me-2 p-2"></i>New Employee </a>
     <div class="row">
         @foreach (var employee in Model)
         {
-            <div class="col-md-4 mt-2 mb-2 ">
-                <div class="card bg-primary-subtle text-center border border-primary-subtle shadow p-3 mb-5 bg-body-tertiary rounded ">
-                    <div class="card-body">
-                        <p><a class="p-3 fs-4 text-primary-emphasis fw-m link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover" href="/Employee/Details/@employee.EmployeeId">@employee.FirstName @employee.LastName</a></p>
+            <div class="col-12 col-md-6 col-lg-4">
+                <a class="employee-card rounded-4" href="/Employee/Details/@employee.EmployeeId">
+                    <div class="card text-center p-3 rounded-4 ">
+                        <div class="card-body">
+                            <h4 class="card-title text-capitalize">@employee.FirstName @employee.LastName</h4>
+                            <small class="text-light-emphasis">@employee.HireDate</small>
+                        </div>
                     </div>
-                </div>
+                </a>
             </div>
         }
     </div>
-</div>
-
-

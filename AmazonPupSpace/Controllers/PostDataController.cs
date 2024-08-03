@@ -27,6 +27,33 @@ namespace AmazonPupSpace.Controllers
             return db.Posts;
         }
 
+        [Route("api/postdata/listpostsbyemployee/{employeeId}")]
+        [HttpGet]
+        public IHttpActionResult GetPostsByEmployee(int employeeId)
+        {
+            var posts = db.Posts.Where(p => p.EmployeeId == employeeId).ToList(); // Adjust the query based on your database schema
+
+            if (posts == null || !posts.Any())
+            {
+                return NotFound();
+            }
+
+            // Map to DTOs if necessary
+            var postDtos = posts.Select(p => new PostDto
+            {
+                PostId = p.PostId,
+                Title = p.Title,
+                Caption = p.Caption,
+                ImageURL = p.ImageURL,
+                PicExtension = p.PicExtension,
+                PostDate = p.PostDate
+                // Add other relevant properties
+            });
+
+            return Ok(postDtos);
+        }
+
+
         // GET: api/PostData/FindPost/5
         [ResponseType(typeof(Post))]
         [HttpGet]

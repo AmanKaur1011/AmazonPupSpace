@@ -4,13 +4,13 @@
     ViewBag.Title = "DeleteConfirm";
 }
 
-<h2 class="mb-3">Are you sure you want to delete this art?</h2>
+<h2 class="mb-3">Are you sure you want to delete this post?</h2>
 <div class="p-4 rounded-2" style="background-color: #f5f5f5;">
     <div class="row">
         <div class="post-info col-12 col-md-6 col-lg-7">
             <h2>@Model.Title</h2>
-            <p><strong>Description:</strong><br /> @Model.Caption</p>
-            <p><strong>Year Installed:</strong> @Model.PostDate.ToString("yyyy")</p>
+            <p><strong>Caption:</strong><br /> @Model.Caption</p>
+            <p><strong>Post Date:</strong> @Model.PostDate.ToString()</p>
             <div class="d-flex align-items-center">
                 <a href="/Post/List" class="btn btn-danger  me-2 mb-2">Cancel</a>
                 <form action="/Post/Delete/@Model.PostId" method="POST">

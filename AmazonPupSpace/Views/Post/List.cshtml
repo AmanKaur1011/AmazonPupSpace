@@ -5,17 +5,13 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2 class="mb-4">List of Arts</h2>
+<h2 class="mb-4">Post List</h2>
 
 <div class="d-flex flex-row justify-content-between mb-4">
     @if (User.Identity.IsAuthenticated)
     {
         <a href="/Post/New" class="btn btn-primary"><i class="fa-solid fa-plus me-2 p-2"></i>New Post</a>
     }
-    <div class="btn-group ms-auto">
-        <button type="button" class="btn btn-outline-secondary btn-view grid btn-active"><i class="fa-solid fa-border-all"></i></button>
-        <button type="button" class="btn btn-outline-secondary btn-view list"><i class="fa-solid fa-list"></i></button>
-    </div>
 </div>
 
 <div class="row grid" id="card-wrapper">
@@ -36,6 +32,7 @@
                 <div class="card-body">
                     <h4 class="card-title">@post.Title</h4>
                     <p class="card-text truncate-overflow">@post.Caption</p>
+                    <p class="card-text card-text-one"><small class="text-muted">@post.PostDate</small></p>
                     <a href="/Post/Details/@post.PostId" class="btn btn-outline-secondary"><span>View details</span><i class="fa-solid fa-arrow-right"></i></a>
                 </div>
             </div>
