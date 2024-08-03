@@ -16,7 +16,6 @@ namespace AmazonPupSpace.Models
 
         public string Caption { get; set; }
 
- 
         public bool ImageURL { get; set; }
         //images deposited into /Content/Images/Animals/{id}.{extension}
         public string PicExtension { get; set; }
@@ -41,6 +40,9 @@ namespace AmazonPupSpace.Models
 
         public DateTime PostDate { get; set; }
         public int EmployeeId { get; set; }
+
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
 
     }
 }

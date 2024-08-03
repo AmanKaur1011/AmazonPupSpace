@@ -12,6 +12,8 @@ namespace AmazonPupSpace.Models.ViewModels
         public Employee Employee { get; set; }
         public string AspNetUserId { get; set; }
         public int EmployeeId { get; set; }
+        public string FirstName {  get; set; }
+        public string LastName { get; set; }
         public IEnumerable<CommentDto> Comments { get; set; }
     }
 }

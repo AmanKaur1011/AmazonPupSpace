@@ -11,6 +11,8 @@
             <div class="post-info col-12 col-md-6 col-lg-7">
                 <h2>@Model.Post.Title</h2>
                 <p><strong>Description:</strong><br /> @Model.Post.Caption</p>
+                <p><strong>EmployeeID:</strong><br /> @Model.Post.EmployeeId</p>
+                <h3>Posted by: @Model.Employee.FirstName @Model.Employee.LastName</h3>
                 <p><strong>Year Installed:</strong> @Model.Post.PostDate.ToString("yyyy")</p>
                 @if (User.Identity.IsAuthenticated)
                 {
@@ -50,7 +52,7 @@
                                     </div>
                                 </div>
                                 <p class="card-text">@comment.CommentText</p>
-                                <a href="/User/Details/@comment.EmployeeId" class="btn btn-secondary mt-2 me-2 mb-3 mb-sm-0">Show User Details</a>
+                                <a href="/Employee/Details/@comment.EmployeeId" class="btn btn-secondary mt-2 me-2 mb-3 mb-sm-0">Show User Details</a>
                                 @if (User.Identity.IsAuthenticated)
                                 {
                                     <a href="/Comment/DeleteConfirm/@comment.CommentId" class="btn btn-outline-danger mt-2">Delete Comment</a>
@@ -71,8 +73,8 @@
         {
             <form method="post" action="/Comment/Create" class="col-md-7">
                 @Html.AntiForgeryToken()
-                <input type="hidden" name="ArtID" value="@Model.Post.PostId" />
-                <input type="hidden" name="UserID" value="@Model.EmployeeId" /> <!-- UserID as int -->
+                <input type="hidden" name="PostId" value="@Model.Post.PostId" />
+                <input type="hidden" name="" value="@Model.EmployeeId" /> <!-- UserID as int -->
                 <div class="form-group">
                     <label for="CommentText" class="mb-2">Your Comment:</label>
                     <textarea class="form-control" name="CommentText" rows="5" required></textarea>

@@ -15,7 +15,8 @@
         <div class="row">
             @Html.LabelFor(m => m.Email, new { @class = "col-md-2 col-form-label" })
             <div class="col-md-10">
-                @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
+                @Html.TextBoxFor(m => m.Email, new { @class = "form-control", @id = "email" })
+                @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
             </div>
         </div>
         <div class="row">
@@ -40,4 +41,28 @@
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#email").blur(function () {
+                var email = $(this).val();
+                $.ajax({
+                    url: '@Url.Action("IsEmailInEmployeeTable", "Account")',
+                    data: { email: email },
+                    dataType: "json",
+                    success: function (data) {
+                        if (!data) {
+                            if ($("#email-error").length === 0) {
+                                $("#email").after('<span id="email-error" class="text-danger">Email is not registered in the Employees table</span>');
+                            }
+                            $("input[type=submit]").attr("disabled", "disabled");
+                        } else {
+                            $("#email-error").remove();
+                            $("input[type=submit]").removeAttr("disabled");
+                        }
+                    }
+                });
+            });
+        });
+    </script>
 }

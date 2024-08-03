@@ -17,11 +17,7 @@ namespace AmazonPupSpace.Controllers
     public class EmployeeDataController : ApiController
     {
         private ApplicationDbContext db = new ApplicationDbContext();
-
-
-       
-
-
+        
         /// <summary>
         /// This method lists the number of employees in the database
         /// </summary>
@@ -51,8 +47,9 @@ namespace AmazonPupSpace.Controllers
                 empDto.FirstName = emp.FirstName;
                 empDto.LastName = emp.LastName;
                 empDto.HireDate = emp.HireDate;
+                empDto.Email = emp.Email;
                 empDto.DepartmentId = emp.Department.DepartmentId;
-               empDto.DepartmentName= emp.Department.DepartmentName;
+                empDto.DepartmentName= emp.Department.DepartmentName;
                 empDto.PreviousDepartmentId = emp.PreviousDepartmentId;
                 
                 EmployeeDtos.Add(empDto);
@@ -91,6 +88,7 @@ namespace AmazonPupSpace.Controllers
                 empDto.FirstName = emp.FirstName;
                 empDto.LastName = emp.LastName;
                 empDto.HireDate = emp.HireDate;
+                empDto.Email = emp.Email;
                 empDto.DepartmentId = emp.Department.DepartmentId;
                 empDto.DepartmentName = emp.Department.DepartmentName;
                 empDto.PreviousDepartmentId = emp.PreviousDepartmentId;
@@ -137,6 +135,7 @@ namespace AmazonPupSpace.Controllers
                 empDto.FirstName = emp.FirstName;
                 empDto.LastName = emp.LastName;
                 empDto.HireDate = emp.HireDate;
+                empDto.Email = emp.Email;
                 empDto.DepartmentId = emp.Department.DepartmentId;
                 empDto.DepartmentName = emp.Department.DepartmentName;
                
@@ -273,6 +272,7 @@ namespace AmazonPupSpace.Controllers
                 FirstName = employee.FirstName,
                 LastName = employee.LastName,
                 HireDate = employee.HireDate,
+                Email = employee.Email,
                 DepartmentId = employee.DepartmentId,
                 DepartmentName = employee.Department.DepartmentName,
                 PreviousDepartmentId = employee.PreviousDepartmentId

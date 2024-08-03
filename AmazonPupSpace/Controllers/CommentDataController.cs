@@ -69,22 +69,22 @@ namespace AmazonPupSpace.Controllers
         [HttpGet]
         public IHttpActionResult FindComment(int id)
         {
-            Comment Comments = db.Comments.Find(id);
+            Comment Comment = db.Comments.Find(id);
             CommentDto CommentsDto = new CommentDto()
             {
-                CommentId = Comments.CommentId,
-                CommentText = Comments.CommentText,
-                DateCommented = Comments.DateCommented,
-                PostId = Comments.Post.PostId,
-                Title = Comments.Post.Title,
-                Caption = Comments.Post.Caption,
-                ImageURL = Comments.Post.ImageURL,
-                PicExtension = Comments.Post.PicExtension,
-                EmployeeId = Comments.Employee.EmployeeId,
-                FirstName = Comments.Employee.FirstName,
-                LastName = Comments.Employee.LastName,
+                CommentId = Comment.CommentId,
+                CommentText = Comment.CommentText,
+                DateCommented = Comment.DateCommented,
+                PostId = Comment.Post.PostId,
+                Title = Comment.Post.Title,
+                Caption = Comment.Post.Caption,
+                ImageURL = Comment.Post.ImageURL,
+                PicExtension = Comment.Post.PicExtension,
+                EmployeeId = Comment.Employee.EmployeeId,
+                FirstName = Comment.Employee.FirstName,
+                LastName = Comment.Employee.LastName,
             };
-            if (Comments == null)
+            if (Comment == null)
             {
                 return NotFound();
             }

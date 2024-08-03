@@ -1,8 +1,10 @@
 ﻿using AmazonPupSpace.Models;
+using Microsoft.AspNet.Identity;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Web;
 using System.Web.Mvc;
@@ -69,28 +71,49 @@ namespace AmazonPupSpace.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create(Comment comment)
         {
-            // Define the API endpoint for adding a new comment.
-            string url = "commentdata/addcomment";
-
-            // Serialize the comments object to JSON format.
-            string jsonpayload = jss.Serialize(comment);
-            Debug.WriteLine(jsonpayload);
-
-            // Create a new HttpContent object for the JSON payload.
-            HttpContent content = new StringContent(jsonpayload);
-            content.Headers.ContentType.MediaType = "application/json";
-
-            // Send the POST request to the API endpoint.
-            HttpResponseMessage response = client.PostAsync(url, content).Result;
-            if (response.IsSuccessStatusCode)
+            if (User.Identity.IsAuthenticated)
             {
-                // If the request is successful, redirect to the commented art.
-                return RedirectToAction("Details", "Post", new { id = comment.PostId }); // Redirect to Art Details view
+                // Fetch the logged-in user's ID
+                var userId = User.Identity.GetUserId();
+                var employee = db.Employees.SingleOrDefault(e => e.UserId == userId);
+
+                if (employee != null)
+                {
+                    comment.EmployeeId = employee.EmployeeId;
+                }
+                else
+                {
+                    // Handle the case where the employee is not found
+                    return new HttpStatusCodeResult(HttpStatusCode.BadRequest, "Employee not found.");
+                }
+
+                // Define the API endpoint for adding a new comment.
+                string url = "commentdata/addcomment";
+
+                // Serialize the comment object to JSON format.
+                string jsonpayload = jss.Serialize(comment);
+                Debug.WriteLine(jsonpayload);
+
+                // Create a new HttpContent object for the JSON payload.
+                HttpContent content = new StringContent(jsonpayload);
+                content.Headers.ContentType.MediaType = "application/json";
+
+                // Send the POST request to the API endpoint.
+                HttpResponseMessage response = client.PostAsync(url, content).Result;
+                if (response.IsSuccessStatusCode)
+                {
+                    // If the request is successful, redirect to the commented art.
+                    return RedirectToAction("Details", "Post", new { id = comment.PostId });
+                }
+                else
+                {
+                    // If the request fails, redirect to the error view.
+                    return RedirectToAction("Error");
+                }
             }
             else
             {
-                // If the request fails, redirect to the error view.
-                return RedirectToAction("Error");
+                return new HttpUnauthorizedResult();
             }
         }
 

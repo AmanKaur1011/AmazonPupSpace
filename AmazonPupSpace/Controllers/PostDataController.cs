@@ -38,7 +38,20 @@ namespace AmazonPupSpace.Controllers
                 return NotFound();
             }
 
-            return Ok(post);
+            PostDto postDto = new PostDto()
+            {
+                PostId = post.PostId,
+                Title = post.Title,
+                Caption = post.Caption,
+                ImageURL = post.ImageURL,
+                PicExtension = post.PicExtension,
+                PostDate = post.PostDate,
+                EmployeeId = post.Employee.EmployeeId,
+                FirstName = post.Employee.FirstName,
+                LastName = post.Employee.LastName,
+            };
+
+            return Ok(postDto);
         }
 
         // PUT: api/PostData/5

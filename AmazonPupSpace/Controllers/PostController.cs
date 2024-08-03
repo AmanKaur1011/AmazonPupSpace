@@ -42,14 +42,28 @@ namespace AmazonPupSpace.Controllers
         {
             PostDetailsViewModel ViewModel = new PostDetailsViewModel();
 
-            // Fetch the art piece
+            // Fetch the post
             string url = "postdata/findpost/" + id;
             HttpResponseMessage response = client.GetAsync(url).Result;
 
             if (response.IsSuccessStatusCode)
             {
-                Post SelectedPost = response.Content.ReadAsAsync<Post>().Result;
-                ViewModel.Post = SelectedPost;
+                var postDto = response.Content.ReadAsAsync<PostDto>().Result;
+                ViewModel.Post = new Post
+                {
+                    PostId = postDto.PostId,
+                    Title = postDto.Title,
+                    Caption = postDto.Caption,
+                    ImageURL = postDto.ImageURL,
+                    PicExtension = postDto.PicExtension,
+                    PostDate = postDto.PostDate,
+                    EmployeeId = postDto.EmployeeId
+                };
+                ViewModel.Employee = new Employee
+                {
+                    FirstName = postDto.FirstName,
+                    LastName = postDto.LastName
+                };
             }
             else
             {
@@ -72,6 +86,7 @@ namespace AmazonPupSpace.Controllers
 
             return View(ViewModel);
         }
+
 
         public ActionResult Error()
         {

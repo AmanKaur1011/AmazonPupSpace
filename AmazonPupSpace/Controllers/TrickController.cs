@@ -7,7 +7,6 @@ using System.Net.Http;
 using AmazonPupSpace.Models;
 using System.Diagnostics;
 using System.Web.Script.Serialization;
-using AmazonPupSpace.Models;
 
 namespace DogTricksApplication.Controllers
 {

@@ -15,6 +15,8 @@ namespace AmazonPupSpace.Controllers
     [Authorize]
     public class AccountController : Controller
     {
+        private ApplicationDbContext db = new ApplicationDbContext();
+
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
 
@@ -151,21 +153,33 @@ namespace AmazonPupSpace.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
-                var result = await UserManager.CreateAsync(user, model.Password);
-                if (result.Succeeded)
-                {
-                    await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);
-                    
-                    // For more information on how to enable account confirmation and password reset please visit https://go.microsoft.com/fwlink/?LinkID=320771
-                    // Send an email with this link
-                    // string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
-                    // var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
-                    // await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
+                // Check if email already exists in Employee table
+                var employee = db.Employees.SingleOrDefault(e => e.Email == model.Email);
 
-                    return RedirectToAction("Index", "Home");
+                if (employee != null)
+                {
+                    // Create a new user
+                    var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
+                    var result = UserManager.Create(user, model.Password);
+
+                    if (result.Succeeded)
+                    {
+                        // Update Employee record with UserId
+                        employee.UserId = user.Id;
+                        db.SaveChanges();
+
+                        // Sign in the user
+                        SignInManager.SignIn(user, isPersistent: false, rememberBrowser: false);
+                        return RedirectToAction("Index", "Home");
+                    }
+                    AddErrors(result);
                 }
-                AddErrors(result);
+                else
+                {
+                    ModelState.AddModelError("", "No employee found with the provided email.");
+                }
+                // If we got this far, something failed, redisplay form
+                return View(model);
             }
 
             // If we got this far, something failed, redisplay form
@@ -481,5 +495,11 @@ namespace AmazonPupSpace.Controllers
             }
         }
         #endregion
+
+        public JsonResult IsEmailInEmployeeTable(string email)
+        {
+            var employee = db.Employees.SingleOrDefault(e => e.Email == email);
+            return Json(employee != null, JsonRequestBehavior.AllowGet);
+        }
     }
 }
