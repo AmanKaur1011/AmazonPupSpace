@@ -9,6 +9,7 @@ AmazonPupSpace is a fun and engaging application designed exclusively for Amazon
 2. [Getting Started](#getting-started)
 3. [How to Use](#how-to-use)
 4. [Technical Details](#technical-details)
+5. [Team Contributions](#team)
 
 ## Features
 
@@ -42,7 +43,13 @@ AmazonPupSpace is a fun and engaging application designed exclusively for Amazon
 
 - **Frontend**: Built with C# and styled using bootstrap.
 - **Backend**: Powered by an ASP.Net backend.
-- **Authentication**: ASP.Net built in user functionality.
+- **Authentication**: ASP.Net built-in user functionality.
+
+## Team
+
+- **Aman**: Employee + Department CRUD, Employee connection to Dog Table including updating views and controllers
+- **Sumin**: Post + Comment CRUD, 
+- **Alejandro**: Dog + Trick CRUD
 
 Thank you for using AmazonPupSpace! We hope you enjoy sharing and discovering all the fantastic tricks that your canine companions have to offer. 🐶✨
 
