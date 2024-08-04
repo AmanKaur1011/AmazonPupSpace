@@ -21,7 +21,7 @@
                     </div>
 
                     <div class="mb-3">
-                        <input type="submit" value="Update Department" class="btn btn-warning" />
+                        <input type="submit" value="Update Department" class="btn btn-secondary" />
 
                     </div>
 
@@ -49,12 +49,18 @@
 
                     }
                     <br />
-                    <div style="color:red ; Background: lightyellow ; padding:4px">NOTE : Employees who has @Model.SelectedDepartment.DepartmentName as thier first Department, they cannot be unassociated from this department throught this page , Please visit  update Employee Page to change their Department</div>
-
+                    <div class="alert alert-warning d-flex" role="alert">
+                        <i class="fa-solid fa-circle-info bi flex-shrink-0 me-2 fs-4 mt-1"></i>
+                        <div>
+                            Employees who has @Model.SelectedDepartment.DepartmentName as thier first Department, 
+                            they cannot be unassociated from this department throught this page , 
+                            Please visit  update Employee Page to change their Department
+                        </div>
+                    </div>
                 </div>
                 <br />
                 <div>
-                    <h3 class="fw-semibold">Add employees to this Department- @Model.SelectedDepartment.DepartmentName</h3>
+                    <h3 class="fw-semibold fs-5">Add employees to this Department- @Model.SelectedDepartment.DepartmentName</h3>
                     <form method="post" action="/Department/Associate/@Model.SelectedDepartment.DepartmentId">
                         <select name="EmployeeId" class="form-select">
                             @foreach (var employee in Model.UnrelatedEmployees)
@@ -66,7 +72,7 @@
 
                             }
                         </select>
-                        <input type="submit" value="Add Employee" class="btn btn-success mt-3" style="background-color:orangered; color:white" />
+                        <input type="submit" value="Add Employee" class="btn btn-outline-secondary mt-3" />
                     </form>
 
                 </div>

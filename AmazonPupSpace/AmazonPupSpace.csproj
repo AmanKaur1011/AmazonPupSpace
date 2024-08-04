@@ -321,6 +321,7 @@
     <Content Include="Content\Images\Peccy600.png" />
     <Content Include="Content\Images\Posts\2.jpg" />
     <Content Include="Content\Images\Posts\default.jpg" />
+    <Content Include="Content\Images\transparent-bg.png" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
