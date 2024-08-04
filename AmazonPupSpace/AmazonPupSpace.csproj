@@ -315,6 +315,7 @@
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\bootstrap.rtl.css" />
     <Content Include="Content\bootstrap.rtl.min.css" />
+    <Content Include="Content\Images\bg-home.png" />
     <Content Include="Content\Images\hero.png" />
     <Content Include="Content\Images\logo.png" />
     <Content Include="Content\Images\Peccy600.png" />

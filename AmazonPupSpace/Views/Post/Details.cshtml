@@ -3,25 +3,10 @@
     ViewBag.Title = "Details";
 }
 
-<a href="/Post/List" class="btn btn-lg btn-info mb-4"><i class="fa-solid fa-chevron-left p-2 me-2"></i>Go back to list</a>
-
 <article>
-    <div class="p-4 rounded-2" style="background-color: #f5f5f5;">
-        <div class="row">
-            <div class="post-info col-12 col-md-6 col-lg-7">
-                <h2>@Model.Post.Title</h2>
-                <h3>Posted by: @Model.Employee.FirstName @Model.Employee.LastName</h3>
-                <p><strong>Caption:</strong><br /> @Model.Post.Caption</p>
-                <p><strong>Post Date:</strong> @Model.Post.PostDate.ToString()</p>
-                @if (User.Identity.IsAuthenticated)
-                {
-                    <div class="d-flex align-items-center">
-                        <a href="/Post/Edit/@Model.Post.PostId" class="btn btn-warning me-2 mb-2">Update</a>
-                        <a href="/Post/DeleteConfirm/@Model.Post.PostId" class="btn btn-danger mb-2">Delete</a>
-                    </div>
-                }
-            </div>
-            <div class="post-image col-12 col-md-6 col-lg-5 mt-4 mt-md-0">
+    <div class="rounded-end-2" style="background-color: #f5f5f5;">
+        <div class="d-flex flex-wrap h-100">
+            <div class="post-image col-12 col-md-7">
                 @{
                     string imageurl = "/Content/Images/Posts/default.jpg";
                     if (Model.Post.ImageURL)
@@ -29,61 +14,88 @@
                         imageurl = "/Content/Images/Posts/" + Model.Post.PostId + "." + Model.Post.PicExtension;
                     }
                 }
-                <img class="img-fluid rounded-2" src="@imageurl" alt="@Model.Post.Title" />
+                <img id="post-img" class="img-fluid rounded-2" src="@imageurl" alt="@Model.Post.Title" />
+            </div>
+            <div id="post-info" class="post-info d-flex flex-column col-12 col-md-5 mt-4 mt-md-0">
+                <div class="flex-shrink-0 p-3 border-bottom">
+                    <h3 class="fs-6 fw-bold mb-0">@Model.Employee.FirstName @Model.Employee.LastName</h3>
+                    <small>@Model.Post.PostDate.ToString()</small>
+                    <h4 class="fs-6 fw-bold mb-0 mt-2">@Model.Post.Title</h4>
+                    <p class="mb-0">@Model.Post.Caption</p>
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <div class="d-flex align-items-center">
+                            <a href="/Post/Edit/@Model.Post.PostId" class="btn btn-warning me-2 mb-2">Update</a>
+                            <a href="/Post/DeleteConfirm/@Model.Post.PostId" class="btn btn-danger mb-2">Delete</a>
+                        </div>
+                    }
+                </div>
+                <div class="comment-block p-3">
+                    <div class="comment-list">
+                        @if (Model.Comments != null && Model.Comments.Any())
+                        {
+                            foreach (var comment in Model.Comments)
+                            {
+                                <div class="comment mb-2">
+                                    <div class="d-flex flex-wrap justify-content-between">
+                                        <div>
+                                            <div class="d-flex flex-wrap mb-2 me-2">
+                                                <h5 class="card-title fs-6 fw-bold me-2 mb-0"><a href="/Employee/Details/@comment.EmployeeId">@comment.FirstName @comment.LastName</a></h5>
+                                                <p class="card-text fs-6">@comment.CommentText</p>
+                                            </div>
+                                            <small class="card-subtitle mb-4 text-body-secondary"><small><i class="fa-regular fa-calendar-days me-2"></i> @comment.DateCommented</small></small>
+                                        </div>
+                                        @if (User.Identity.IsAuthenticated)
+                                        {
+                                            <a href="/Comment/DeleteConfirm/@comment.CommentId" class="btn btn-danger px-3 py-2"><i class="fa-solid fa-trash-can"></i></a>
+                                        }
+                                    </div>
+                                </div>
+                            }
+                        }
+                        else
+                        {
+                            <p>No comments yet.</p>
+                        }
+                    </div>
+                </div>
+                <div class="p-3 border-top flex-shrink-0">
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <form method="post" action="/Comment/Create">
+                            @Html.AntiForgeryToken()
+                            <input type="hidden" name="PostId" value="@Model.Post.PostId" />
+                            <input type="hidden" name="" value="@Model.EmployeeId" />
+                            <div class="d-flex flex-wrap">
+                                <label for="CommentText" class="mb-2 d-none">Your Comment:</label>
+                                <textarea class="form-control w-auto flex-grow-1 me-2" name="CommentText" rows="1" required></textarea>
+                                <button type="submit" class="btn btn-dark">Post</button>
+                            </div>
+                        </form>
+                    }
+                    else
+                    {
+                        <p>Please <strong><a href="/Account/Login">log in</a></strong> to leave a comment.</p>
+                    }
+                </div>
             </div>
         </div>
     </div>
-
-    <div class="comment-block mt-50">
-        <h3 class="mb-4"><strong class="count"></strong> Comments</h3>
-        <div class="comment-list row mb-50">
-            @if (Model.Comments != null && Model.Comments.Any())
-            {
-                foreach (var comment in Model.Comments)
-                {
-                    <div class="comment col-md-6 mb-4">
-                        <div class="card">
-                            <div class="card-body">
-                                <div class="d-md-flex justify-content-between">
-                                    <div>
-                                        <h5 class="card-title">@comment.FirstName @comment.LastName</h5>
-                                        <h6 class="card-subtitle mb-4 text-body-secondary"><small><i class="fa-regular fa-calendar-days me-2"></i> @comment.DateCommented</small></h6>
-                                    </div>
-                                </div>
-                                <p class="card-text">@comment.CommentText</p>
-                                <a href="/Employee/Details/@comment.EmployeeId" class="btn btn-secondary mt-2 me-2 mb-3 mb-sm-0">Show User Details</a>
-                                @if (User.Identity.IsAuthenticated)
-                                {
-                                    <a href="/Comment/DeleteConfirm/@comment.CommentId" class="btn btn-outline-danger mt-2">Delete Comment</a>
-                                }
-                            </div>
-                        </div>
-                    </div>
-                }
-            }
-            else
-            {
-                <p>No comments yet.</p>
-            }
-        </div>
-
-        <h3 class="mb-4">Leave a Comment</h3>
-        @if (User.Identity.IsAuthenticated)
-        {
-            <form method="post" action="/Comment/Create" class="col-md-7">
-                @Html.AntiForgeryToken()
-                <input type="hidden" name="PostId" value="@Model.Post.PostId" />
-                <input type="hidden" name="" value="@Model.EmployeeId" />
-                <div class="form-group">
-                    <label for="CommentText" class="mb-2">Your Comment:</label>
-                    <textarea class="form-control" name="CommentText" rows="5" required></textarea>
-                </div>
-                <button type="submit" class="btn btn-secondary my-4">Submit</button>
-            </form>
-        }
-        else
-        {
-            <p>Please <strong><a href="/Account/Login">log in</a></strong> to leave a comment.</p>
-        }
-    </div>
 </article>
+
+<script>
+    window.onload = function () {
+        // Get the height of the left image
+        var leftImageHeight = document.getElementById('post-img').clientHeight;
+
+        // Set the height of the right div to match the left image's height
+        document.getElementById('post-info').style.height = leftImageHeight + 'px';
+    };
+
+    // Adjust the height dynamically if the window is resized
+    window.onresize = function () {
+        var leftImageHeight = document.getElementById('post-img').clientHeight;
+        document.getElementById('post-info').style.height = leftImageHeight + 'px';
+    };
+
+</script>

@@ -4,39 +4,43 @@
 }
 
 <main aria-labelledby="title">
-    <h2 id="title">@ViewBag.Title.</h2>
+    <div class="row align-items-center">
+        <div class="col-12 col-md-6">
+            <h2 id="title">@ViewBag.Title.</h2>
 
-    @using (Html.BeginForm("Register", "Account", FormMethod.Post, new { role = "form" }))
-    {
-        @Html.AntiForgeryToken()
-        <h4>Create a new account.</h4>
-        <hr />
-        @Html.ValidationSummary("", new { @class = "text-danger" })
-        <div class="row">
-            @Html.LabelFor(m => m.Email, new { @class = "col-md-2 col-form-label" })
-            <div class="col-md-10">
-                @Html.TextBoxFor(m => m.Email, new { @class = "form-control", @id = "email" })
-                @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
-            </div>
+            @using (Html.BeginForm("Register", "Account", FormMethod.Post, new { role = "form" }))
+            {
+                @Html.AntiForgeryToken()
+                <h5 class="my-3">Create a new account with your amazon user email.</h5>
+                @Html.ValidationSummary("", new { @class = "text-danger" })
+                <div class="form-group">
+                    @Html.LabelFor(m => m.Email, new { @class = "col-md-10 col-form-label" })
+                    <div class="col-md-10">
+                        @Html.TextBoxFor(m => m.Email, new { @class = "form-control", @id = "email" })
+                        @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(m => m.Password, new { @class = "col-md-10 col-form-label" })
+                    <div class="col-md-10">
+                        @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(m => m.ConfirmPassword, new { @class = "col-md-10 col-form-label" })
+                    <div class="col-md-10">
+                        @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control" })
+                    </div>
+                </div>
+                <div class="form-group">
+                        <input type="submit" value="Register" class="btn btn-secondary mt-3" />
+                </div>
+            }
         </div>
-        <div class="row">
-            @Html.LabelFor(m => m.Password, new { @class = "col-md-2 col-form-label" })
-            <div class="col-md-10">
-                @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
-            </div>
+        <div class="col-12 col-md-6">
+            <img src="~/Content/Images/bg-home.png" alt="Hero image of collages of puppies pictures" class="img-fluid" />
         </div>
-        <div class="row">
-            @Html.LabelFor(m => m.ConfirmPassword, new { @class = "col-md-2 col-form-label" })
-            <div class="col-md-10">
-                @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control" })
-            </div>
-        </div>
-        <div class="row">
-            <div class="offset-md-2 col-md-10">
-                <input type="submit" value="Register" class="btn btn-outline-dark" />
-            </div>
-        </div>
-    }
+    </div>
 </main>
 
 @section Scripts {
