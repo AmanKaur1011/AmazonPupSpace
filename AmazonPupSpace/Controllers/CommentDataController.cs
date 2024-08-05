@@ -12,11 +12,23 @@ using AmazonPupSpace.Models;
 
 namespace AmazonPupSpace.Controllers
 {
+    /// <summary>
+    /// The CommentDataController is responsible for handling CRUD operations related to comments in the AmazonPupSpace application.
+    /// </summary>
     public class CommentDataController : ApiController
     {
         private ApplicationDbContext db = new ApplicationDbContext();
 
-        // GET: api/CommentData/ListComments
+        /// <summary>
+        /// Returns all comments in the system.
+        /// </summary>
+        /// <returns>
+        /// HEADER: 200 (OK)
+        /// CONTENT: All comments in the database.
+        /// </returns>
+        /// <example>
+        /// GET: api/CommentData/ListComments
+        /// </example>
         [HttpGet]
         [Route("api/CommentData/ListComments")]
         [ResponseType(typeof(CommentDto))]
@@ -42,6 +54,17 @@ namespace AmazonPupSpace.Controllers
             return Ok(CommentDtos);
         }
 
+        /// <summary>
+        /// Returns comments for a specific post.
+        /// </summary>
+        /// <param name="id">The ID of the post.</param>
+        /// <returns>
+        /// HEADER: 200 (OK)
+        /// CONTENT: Comments related to the specified post.
+        /// </returns>
+        /// <example>
+        /// GET: api/CommentData/ListCommentsForPost/5
+        /// </example>
         [HttpGet]
         [ResponseType(typeof(CommentDto))]
         public IEnumerable<CommentDto> ListCommentsForPost(int id)
@@ -64,12 +87,29 @@ namespace AmazonPupSpace.Controllers
             return comments.ToList();
         }
 
-        // GET: api/CommentData/findComment/5
+        /// <summary>
+        /// Finds a specific comment by ID.
+        /// </summary>
+        /// <param name="id">The ID of the comment.</param>
+        /// <returns>
+        /// HEADER: 200 (OK)
+        /// CONTENT: The comment matching the specified ID.
+        /// HEADER: 404 (Not Found)
+        /// CONTENT: No comment found with the specified ID.
+        /// </returns>
+        /// <example>
+        /// GET: api/CommentData/FindComment/5
+        /// </example>
         [ResponseType(typeof(CommentDto))]
         [HttpGet]
         public IHttpActionResult FindComment(int id)
         {
             Comment Comment = db.Comments.Find(id);
+            if (Comment == null)
+            {
+                return NotFound();
+            }
+
             CommentDto CommentsDto = new CommentDto()
             {
                 CommentId = Comment.CommentId,
@@ -84,15 +124,27 @@ namespace AmazonPupSpace.Controllers
                 FirstName = Comment.Employee.FirstName,
                 LastName = Comment.Employee.LastName,
             };
-            if (Comment == null)
-            {
-                return NotFound();
-            }
 
             return Ok(CommentsDto);
         }
 
-        // PUT: api/CommentData/UpdateComment/5
+        /// <summary>
+        /// Updates a specific comment.
+        /// </summary>
+        /// <param name="id">The ID of the comment to be updated.</param>
+        /// <param name="comment">The updated comment data.</param>
+        /// <returns>
+        /// HEADER: 204 (No Content)
+        /// CONTENT: No content.
+        /// HEADER: 400 (Bad Request)
+        /// CONTENT: If the ID does not match or the model state is invalid.
+        /// HEADER: 404 (Not Found)
+        /// CONTENT: If no comment is found with the specified ID.
+        /// </returns>
+        /// <example>
+        /// POST: api/CommentData/UpdateComment/5
+        /// FORM DATA: Updated Comment JSON Object
+        /// </example>
         [ResponseType(typeof(CommentDto))]
         [HttpPost]
         public IHttpActionResult UpdateComment(int id, Comment comment)
@@ -128,7 +180,20 @@ namespace AmazonPupSpace.Controllers
             return StatusCode(HttpStatusCode.NoContent);
         }
 
-        // POST: api/CommentData/AddComment
+        /// <summary>
+        /// Adds a new comment.
+        /// </summary>
+        /// <param name="comment">The new comment data.</param>
+        /// <returns>
+        /// HEADER: 201 (Created)
+        /// CONTENT: The newly created comment.
+        /// HEADER: 400 (Bad Request)
+        /// CONTENT: If the model state is invalid.
+        /// </returns>
+        /// <example>
+        /// POST: api/CommentData/AddComment
+        /// FORM DATA: New Comment JSON Object
+        /// </example>
         [ResponseType(typeof(Comment))]
         [HttpPost]
         public IHttpActionResult AddComment(Comment comment)
@@ -144,7 +209,19 @@ namespace AmazonPupSpace.Controllers
             return CreatedAtRoute("DefaultApi", new { id = comment.CommentId }, comment);
         }
 
-        // DELETE: api/CommentData/DeleteComment/5
+        /// <summary>
+        /// Deletes a specific comment by ID.
+        /// </summary>
+        /// <param name="id">The ID of the comment to be deleted.</param>
+        /// <returns>
+        /// HEADER: 200 (OK)
+        /// CONTENT: The deleted comment.
+        /// HEADER: 404 (Not Found)
+        /// CONTENT: If no comment is found with the specified ID.
+        /// </returns>
+        /// <example>
+        /// POST: api/CommentData/DeleteComment/5
+        /// </example>
         [ResponseType(typeof(Comment))]
         [HttpPost]
         public IHttpActionResult DeleteComment(int id)
@@ -161,6 +238,10 @@ namespace AmazonPupSpace.Controllers
             return Ok(comment);
         }
 
+        /// <summary>
+        /// Disposes the database context.
+        /// </summary>
+        /// <param name="disposing">Whether to dispose managed resources.</param>
         protected override void Dispose(bool disposing)
         {
             if (disposing)
@@ -170,6 +251,11 @@ namespace AmazonPupSpace.Controllers
             base.Dispose(disposing);
         }
 
+        /// <summary>
+        /// Checks if a comment exists by ID.
+        /// </summary>
+        /// <param name="id">The ID of the comment.</param>
+        /// <returns>True if the comment exists, otherwise false.</returns>
         private bool CommentExists(int id)
         {
             return db.Comments.Count(e => e.CommentId == id) > 0;

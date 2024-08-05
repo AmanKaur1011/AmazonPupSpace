@@ -145,10 +145,6 @@ namespace AmazonPupSpace.Controllers
                 EmployeeDtos.Add(empDto);
 
             }
-
-
-
-
             return EmployeeDtos;
         }
 

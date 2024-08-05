@@ -7,43 +7,47 @@
 
 <a href="/Employee/List" class="btn btn-lg btn-info mb-4"><i class="fa-solid fa-chevron-left p-2 me-2"></i>Go back to list</a>
 
-        <div class="row">
-            <div class="col-md-6">
-                <form action="/Employee/Create" method="POST">
-                    <div class="mb-3">
-                        <label class="form-label">First Name: </label> <input class="form-control" type="text" name="FirstName" />
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Last Name: </label> <input class="form-control" type="text" name="LastName" />
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Email: </label> <input class="form-control" type="email" name="Email" />
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Hire Date</label> <input class="form-control" type="date" name="HireDate" />
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Department</label>
-                        <select class="form-select" name="DepartmentId">
-                            @foreach (var department in Model.DepartmentOptions)
-                            {
-                                <option value="@department.DepartmentId">@department.DepartmentName</option>
+<div class="row">
+    <div class="col-md-6">
+        <form action="/Employee/Create" method="POST">
+            <div class="mb-3">
+                <label class="form-label">First Name: </label> <input class="form-control" type="text" name="FirstName" />
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Last Name: </label> <input class="form-control" type="text" name="LastName" />
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Email: </label> <input class="form-control" type="email" name="Email" />
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Hire Date</label> <input id="HireDate" class="form-control" type="date" name="HireDate" />
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Department</label>
+                <select class="form-select" name="DepartmentId">
+                    @foreach (var department in Model.DepartmentOptions)
+                    {
+                        <option value="@department.DepartmentId">@department.DepartmentName</option>
 
-                            }
-                        </select>
-
-
-                    </div>
+                    }
+                </select>
 
 
-                    <!--<div>
-        <label>Position</label> <input type="number" name="PositionId" />
-    </div>-->
-                    <div>
-                        <input type="submit" value="Add Employee" class="btn btn-success" />
-
-                    </div>
-                </form>
             </div>
 
+
+            <!--<div>
+<label>Position</label> <input type="number" name="PositionId" />
+</div>-->
+            <div>
+                <input type="submit" value="Add Employee" class="btn btn-success" />
+
+            </div>
+        </form>
+    </div>
+
 </div>
+<script>
+    // Set the maximum date for the input field
+    document.getElementById("HireDate").setAttribute("max", today);
+</script>

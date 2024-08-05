@@ -13,6 +13,9 @@ using Microsoft.AspNet.Identity;
 
 namespace AmazonPupSpace.Controllers
 {
+    /// <summary>
+    /// Manages CRUD operations for posts.
+    /// </summary>
     public class PostController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
@@ -21,15 +24,21 @@ namespace AmazonPupSpace.Controllers
 
         static PostController()
         {
+            // Initialize the HttpClient with the base address for API calls.
             client = new HttpClient();
             client.BaseAddress = new Uri("https://localhost:44351/api/");
         }
-        // GET: Post/List
+
+        /// <summary>
+        /// Displays a list of posts, optionally filtered by a search query.
+        /// </summary>
+        /// <param name="searchQuery">The query to filter posts by title.</param>
+        /// <returns>A view with a list of posts.</returns>
         public ActionResult List(string searchQuery)
         {
             var posts = db.Posts.AsQueryable();
 
-            // Filter the results based on the search query
+            // Filter the posts based on the search query if provided.
             if (!string.IsNullOrEmpty(searchQuery))
             {
                 posts = posts.Where(a => a.Title.Contains(searchQuery));
@@ -38,12 +47,16 @@ namespace AmazonPupSpace.Controllers
             return View(posts.ToList());
         }
 
-        // GET: Post/Details/5
+        /// <summary>
+        /// Displays the details of a specific post, including its comments.
+        /// </summary>
+        /// <param name="id">The ID of the post to display.</param>
+        /// <returns>A view with details of the post.</returns>
         public ActionResult Details(int id)
         {
             PostDetailsViewModel ViewModel = new PostDetailsViewModel();
 
-            // Fetch the post
+            // Fetch the post details from the API.
             string url = "postdata/findpost/" + id;
             HttpResponseMessage response = client.GetAsync(url).Result;
 
@@ -71,7 +84,7 @@ namespace AmazonPupSpace.Controllers
                 return HttpNotFound("Art piece not found.");
             }
 
-            // Fetch the comments
+            // Fetch comments related to the post.
             url = "commentdata/ListCommentsForPost/" + id;
             response = client.GetAsync(url).Result;
 
@@ -88,157 +101,152 @@ namespace AmazonPupSpace.Controllers
             return View(ViewModel);
         }
 
-
+        /// <summary>
+        /// Displays the error view.
+        /// </summary>
+        /// <returns>An error view.</returns>
         public ActionResult Error()
         {
             return View();
         }
 
-        // GET: Post/New
+        /// <summary>
+        /// Displays a form to create a new post.
+        /// </summary>
+        /// <returns>A view with a form to create a new post.</returns>
         public ActionResult New()
         {
-            // Get the current user's ID
+            // Get the current user's ID and fetch employee details.
             string userId = User.Identity.GetUserId();
-
-            // Fetch employee details using the user ID if needed
             var employee = db.Employees.FirstOrDefault(e => e.UserId == userId);
-
-            // Pass the employee ID to the view
             ViewBag.EmployeeId = employee?.EmployeeId;
 
             return View();
         }
 
-
-        // POST: Post/Create
+        /// <summary>
+        /// Creates a new post.
+        /// </summary>
+        /// <param name="post">The post to create.</param>
+        /// <returns>A redirection to the post list or an error view.</returns>
         [HttpPost]
         public ActionResult Create(Post post)
         {
-            // Ensure that the EmployeeId is set
+            // Ensure the EmployeeId is provided and valid.
             if (string.IsNullOrEmpty(Request.Form["EmployeeId"]) || !int.TryParse(Request.Form["EmployeeId"], out int employeeId))
             {
-                // Handle the error or redirect if EmployeeId is not set
-                return RedirectToAction("Error"); // Or any other appropriate action
+                return RedirectToAction("Error");
             }
 
             post.EmployeeId = employeeId;
-
             string url = "postdata/addpost";
 
-            // Serialize the post object to JSON format
+            // Serialize and send the new post to the API.
             string jsonpayload = jss.Serialize(post);
             Debug.WriteLine(jsonpayload);
-
-            // Create a new HttpContent object for the JSON payload
             HttpContent content = new StringContent(jsonpayload);
             content.Headers.ContentType.MediaType = "application/json";
-
-            // Send the POST request to the API endpoint
             HttpResponseMessage response = client.PostAsync(url, content).Result;
 
             if (response.IsSuccessStatusCode)
             {
-                // If the request is successful, redirect to the post list
                 return RedirectToAction("List");
             }
             else
             {
-                // If the request fails, redirect to the error view
                 return RedirectToAction("Error");
             }
         }
 
-
-        // GET: Post/Edit/5
+        /// <summary>
+        /// Displays a form to edit an existing post.
+        /// </summary>
+        /// <param name="id">The ID of the post to edit.</param>
+        /// <returns>A view with the post details for editing.</returns>
         public ActionResult Edit(int id)
         {
-            // Define the API endpoint for finding an post piece by ID.
+            // Fetch the post data for editing.
             string url = "postdata/findpost/" + id;
             HttpResponseMessage responseMessage = client.GetAsync(url).Result;
-
-            // Deserialize the JSON response into an Art object.
             Post SelectedPost = responseMessage.Content.ReadAsAsync<Post>().Result;
 
-            // Pass the post piece object to the view for editing.
             return View(SelectedPost);
         }
 
-        // POST: Post/Update/5
+        /// <summary>
+        /// Updates an existing post.
+        /// </summary>
+        /// <param name="id">The ID of the post to update.</param>
+        /// <param name="post">The updated post details.</param>
+        /// <param name="ImageURL">The new image for the post (if any).</param>
+        /// <returns>A redirection to the post details or an error view.</returns>
         [HttpPost]
         public ActionResult Update(int id, Post post, HttpPostedFileBase ImageURL)
         {
-            // Define the API endpoint for updating an post piece.
+            // Update the post details.
             string url = "postdata/updatepost/" + id;
-
-            // Serialize the post object to JSON format.
             string jsonpayload = jss.Serialize(post);
-
-            // Create a new HttpContent object for the JSON payload.
             HttpContent content = new StringContent(jsonpayload);
             content.Headers.ContentType.MediaType = "application/json";
-
-            // Send the POST request to the API endpoint.
-            HttpResponseMessage response = client.PostAsync(url, content).Result;
-
-            if (response.IsSuccessStatusCode && ImageURL != null)
-            {//Updating the animal picture as a separate request
-                Debug.WriteLine("Calling Update Image method.");
-                //Send over image data for player
-                url = "PostData/UploadPostPic/" + id;
-
-                MultipartFormDataContent requestcontent = new MultipartFormDataContent();
-                HttpContent imagecontent = new StreamContent(ImageURL.InputStream);
-                requestcontent.Add(imagecontent, "ImageURL", ImageURL.FileName);
-                response = client.PostAsync(url, requestcontent).Result;
-                // If the request is successful, redirect to the post edited.
-                return RedirectToAction("Details", "Post", new { id = post.PostId });
-            }
-            else if (response.IsSuccessStatusCode)
-            {
-                //No image upload, but update still successful
-                return RedirectToAction("Details", "Post", new { id = post.PostId });
-            }
-            else
-            {
-                // If the request fails, redirect to the error view.
-                return RedirectToAction("Error");
-            }
-        }
-
-        // GET: Post/Delete/5
-        public ActionResult DeleteConfirm(int id)
-        {
-            string url = "postdata/findpost/" + id;
-            HttpResponseMessage response = client.GetAsync(url).Result;
-
-            // Deserialize the JSON response into an Art object.
-            Post SelectedPost = response.Content.ReadAsAsync<Post>().Result;
-
-            // Pass the post piece object to the view for deletion confirmation.
-            return View(SelectedPost);
-        }
-
-        // POST: Post/Delete/5
-        [HttpPost]
-        public ActionResult Delete(int id, FormCollection collection)
-        {
-            string url = "postdata/deletepost/" + id;
-
-            // Create an empty HttpContent object since the delete request doesn't require a body.
-            HttpContent content = new StringContent("");
-            content.Headers.ContentType.MediaType = "application/json";
-
-            // Send the POST request to the API endpoint.
             HttpResponseMessage response = client.PostAsync(url, content).Result;
 
             if (response.IsSuccessStatusCode)
             {
-                // If the request is successful, redirect to the art list.
+                // If an image is uploaded, handle the image update separately.
+                if (ImageURL != null)
+                {
+                    Debug.WriteLine("Calling Update Image method.");
+                    url = "PostData/UploadPostPic/" + id;
+                    MultipartFormDataContent requestcontent = new MultipartFormDataContent();
+                    HttpContent imagecontent = new StreamContent(ImageURL.InputStream);
+                    requestcontent.Add(imagecontent, "ImageURL", ImageURL.FileName);
+                    response = client.PostAsync(url, requestcontent).Result;
+                }
+
+                return RedirectToAction("Details", new { id = post.PostId });
+            }
+            else
+            {
+                return RedirectToAction("Error");
+            }
+        }
+
+        /// <summary>
+        /// Displays a confirmation view before deleting a post.
+        /// </summary>
+        /// <param name="id">The ID of the post to delete.</param>
+        /// <returns>A view with the post details for deletion confirmation.</returns>
+        public ActionResult DeleteConfirm(int id)
+        {
+            // Fetch the post data to confirm deletion.
+            string url = "postdata/findpost/" + id;
+            HttpResponseMessage response = client.GetAsync(url).Result;
+            Post SelectedPost = response.Content.ReadAsAsync<Post>().Result;
+
+            return View(SelectedPost);
+        }
+
+        /// <summary>
+        /// Deletes a post.
+        /// </summary>
+        /// <param name="id">The ID of the post to delete.</param>
+        /// <param name="collection">Form collection (not used).</param>
+        /// <returns>A redirection to the post list or an error view.</returns>
+        [HttpPost]
+        public ActionResult Delete(int id, FormCollection collection)
+        {
+            // Delete the post.
+            string url = "postdata/deletepost/" + id;
+            HttpContent content = new StringContent("");
+            content.Headers.ContentType.MediaType = "application/json";
+            HttpResponseMessage response = client.PostAsync(url, content).Result;
+
+            if (response.IsSuccessStatusCode)
+            {
                 return RedirectToAction("List");
             }
             else
             {
-                // If the request fails, redirect to the error view.
                 return RedirectToAction("Error");
             }
         }

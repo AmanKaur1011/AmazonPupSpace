@@ -11,34 +11,49 @@ using System.Net.Http;
 using System.Web;
 using System.Web.Http;
 using System.Web.Http.Description;
-using System.Web.UI.WebControls.WebParts;
 using AmazonPupSpace.Models;
 
 namespace AmazonPupSpace.Controllers
 {
+    /// <summary>
+    /// The PostDataController is responsible for handling CRUD operations for posts in the AmazonPupSpace application.
+    /// </summary>
     public class PostDataController : ApiController
     {
         private ApplicationDbContext db = new ApplicationDbContext();
 
-        // GET: api/PostData/ListPosts
+        /// <summary>
+        /// Retrieves a list of all posts.
+        /// </summary>
+        /// <returns>An IQueryable list of Post objects.</returns>
+        /// <example>
+        /// GET: api/PostData/ListPosts
+        /// </example>
         [HttpGet]
         public IQueryable<Post> ListPosts()
         {
             return db.Posts;
         }
 
+        /// <summary>
+        /// Retrieves a list of posts by a specific employee.
+        /// </summary>
+        /// <param name="employeeId">The ID of the employee.</param>
+        /// <returns>A list of PostDto objects created by the specified employee.</returns>
+        /// <example>
+        /// GET: api/postdata/listpostsbyemployee/{employeeId}
+        /// </example>
         [Route("api/postdata/listpostsbyemployee/{employeeId}")]
         [HttpGet]
         public IHttpActionResult GetPostsByEmployee(int employeeId)
         {
-            var posts = db.Posts.Where(p => p.EmployeeId == employeeId).ToList(); // Adjust the query based on your database schema
+            var posts = db.Posts.Where(p => p.EmployeeId == employeeId).ToList();
 
             if (posts == null || !posts.Any())
             {
                 return NotFound();
             }
 
-            // Map to DTOs if necessary
             var postDtos = posts.Select(p => new PostDto
             {
                 PostId = p.PostId,
@@ -47,14 +62,19 @@ namespace AmazonPupSpace.Controllers
                 ImageURL = p.ImageURL,
                 PicExtension = p.PicExtension,
                 PostDate = p.PostDate
-                // Add other relevant properties
             });
 
             return Ok(postDtos);
         }
 
-
-        // GET: api/PostData/FindPost/5
+        /// <summary>
+        /// Retrieves the details of a specific post.
+        /// </summary>
+        /// <param name="id">The ID of the post.</param>
+        /// <returns>A PostDto object containing the details of the specified post.</returns>
+        /// <example>
+        /// GET: api/PostData/FindPost/5
+        /// </example>
         [ResponseType(typeof(Post))]
         [HttpGet]
         public IHttpActionResult FindPost(int id)
@@ -81,7 +101,16 @@ namespace AmazonPupSpace.Controllers
             return Ok(postDto);
         }
 
-        // PUT: api/PostData/5
+        /// <summary>
+        /// Updates an existing post.
+        /// </summary>
+        /// <param name="id">The ID of the post to update.</param>
+        /// <param name="post">The updated post object.</param>
+        /// <returns>Status code 204 (No Content) if the update is successful, or an error response if not.</returns>
+        /// <example>
+        /// PUT: api/PostData/5
+        /// FORM DATA: Updated Post JSON Object
+        /// </example>
         [ResponseType(typeof(void))]
         [HttpPost]
         public IHttpActionResult UpdatePost(int id, Post post)
@@ -97,7 +126,6 @@ namespace AmazonPupSpace.Controllers
             }
 
             db.Entry(post).State = EntityState.Modified;
-            // Picture update is handled by another method
             db.Entry(post).Property(p => p.ImageURL).IsModified = false;
             db.Entry(post).Property(p => p.PicExtension).IsModified = false;
 
@@ -120,24 +148,20 @@ namespace AmazonPupSpace.Controllers
             return StatusCode(HttpStatusCode.NoContent);
         }
 
-
         /// <summary>
-        /// Receives post picture data, uploads it to the webserver and updates the art's HasPic option
+        /// Receives post picture data, uploads it to the webserver, and updates the post's picture information.
         /// </summary>
-        /// <param name="id">the post id</param>
-        /// <returns>status code 200 if successful.</returns>
+        /// <param name="id">The post ID.</param>
+        /// <returns>Status code 200 (OK) if the upload is successful, or a bad request response if not.</returns>
         /// <example>
         /// curl -F artpic=@file.jpg "https://localhost:xx/api/artdata/uploadpostpic/2"
         /// POST: api/artData/UpdatepostPic/3
         /// HEADER: enctype=multipart/form-data
         /// FORM-DATA: image
         /// </example>
-        /// https://stackoverflow.com/questions/28369529/how-to-set-up-a-web-api-controller-for-multipart-form-data
-
         [HttpPost]
         public IHttpActionResult UploadPostPic(int id)
         {
-
             bool haspic = false;
             string picextension;
             if (Request.Content.IsMimeMultipartContent())
@@ -147,42 +171,30 @@ namespace AmazonPupSpace.Controllers
                 int numfiles = HttpContext.Current.Request.Files.Count;
                 Debug.WriteLine("Files Received: " + numfiles);
 
-                //Check if a file is posted
                 if (numfiles == 1 && HttpContext.Current.Request.Files[0] != null)
                 {
                     var artPic = HttpContext.Current.Request.Files[0];
-                    //Check if the file is empty
                     if (artPic.ContentLength > 0)
                     {
-                        //establish valid file types (can be changed to other file extensions if desired!)
                         var valtypes = new[] { "jpeg", "jpg", "png", "gif" };
                         var extension = Path.GetExtension(artPic.FileName).Substring(1);
-                        //Check the extension of the file
                         if (valtypes.Contains(extension))
                         {
                             try
                             {
-                                //file name is the id of the image
                                 string fn = id + "." + extension;
-
-                                //get a direct file path to ~/Content/posts/{id}.{extension}
                                 string path = Path.Combine(HttpContext.Current.Server.MapPath("~/Content/Images/Posts/"), fn);
-
-                                //save the file
                                 artPic.SaveAs(path);
 
-                                //if these are all successful then we can set these fields
                                 haspic = true;
                                 picextension = extension;
 
-                                //Update the art haspic and picextension fields in the database
                                 Post Selectedpost = db.Posts.Find(id);
                                 Selectedpost.ImageURL = haspic;
                                 Selectedpost.PicExtension = extension;
                                 db.Entry(Selectedpost).State = EntityState.Modified;
 
                                 db.SaveChanges();
-
                             }
                             catch (Exception ex)
                             {
@@ -192,21 +204,25 @@ namespace AmazonPupSpace.Controllers
                             }
                         }
                     }
-
                 }
 
                 return Ok();
             }
             else
             {
-                //not multipart form data
                 return BadRequest();
-
             }
-
         }
 
-        // POST: api/PostData/AddPost
+        /// <summary>
+        /// Adds a new post.
+        /// </summary>
+        /// <param name="post">The post object to add.</param>
+        /// <returns>Status code 201 (Created) if the post is successfully added, or a bad request response if not.</returns>
+        /// <example>
+        /// POST: api/PostData/AddPost
+        /// FORM DATA: New Post JSON Object
+        /// </example>
         [ResponseType(typeof(Post))]
         [HttpPost]
         public IHttpActionResult AddPost(Post post)
@@ -222,7 +238,14 @@ namespace AmazonPupSpace.Controllers
             return CreatedAtRoute("DefaultApi", new { id = post.PostId }, post);
         }
 
-        // DELETE: api/PostData/5
+        /// <summary>
+        /// Deletes a specific post.
+        /// </summary>
+        /// <param name="id">The ID of the post to delete.</param>
+        /// <returns>Status code 200 (OK) if the post is successfully deleted, or a not found response if the post does not exist.</returns>
+        /// <example>
+        /// POST: api/PostData/DeletePost/5
+        /// </example>
         [ResponseType(typeof(Post))]
         [HttpPost]
         public IHttpActionResult DeletePost(int id)
@@ -235,7 +258,6 @@ namespace AmazonPupSpace.Controllers
 
             if (post.ImageURL && post.PicExtension != "")
             {
-                //also delete image from path
                 string path = HttpContext.Current.Server.MapPath("~/Content/Images/Posts/" + id + "." + post.PicExtension);
                 if (System.IO.File.Exists(path))
                 {
@@ -250,6 +272,10 @@ namespace AmazonPupSpace.Controllers
             return Ok(post);
         }
 
+        /// <summary>
+        /// Disposes of the database context when the controller is disposed.
+        /// </summary>
+        /// <param name="disposing">A boolean value indicating whether the context should be disposed.</param>
         protected override void Dispose(bool disposing)
         {
             if (disposing)
@@ -259,6 +285,11 @@ namespace AmazonPupSpace.Controllers
             base.Dispose(disposing);
         }
 
+        /// <summary>
+        /// Checks if a post with the specified ID exists.
+        /// </summary>
+        /// <param name="id">The ID of the post.</param>
+        /// <returns>True if the post exists, false otherwise.</returns>
         private bool PostExists(int id)
         {
             return db.Posts.Count(e => e.PostId == id) > 0;

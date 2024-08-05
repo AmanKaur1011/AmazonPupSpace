@@ -427,6 +427,14 @@ a {
     right: 0;
 }
 
+.home-hero {
+    background-image: url(Images/home-bg.jpg);
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 90vh;
+    border-radius: 30px;
+}
+
 @media only screen and (max-width: 992px) {
     .grid .card-item {
         width: 50%;

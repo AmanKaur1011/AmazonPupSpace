@@ -166,12 +166,7 @@ namespace AmazonPupSpace.Controllers
                 dogDto.EmployeeId = dog.EmployeeId;
 
                 DogDtos.Add(dogDto);
-
             }
-
-
-
-
             return DogDtos;
         }
 
