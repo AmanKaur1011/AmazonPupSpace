@@ -4,70 +4,69 @@
 }
 
 
-<h2>Edit Your Pup</h2>
+<h2 class="mb-4">Update Your Pup</h2>
 
-<form action="/Dog/Update" method="post">
-    <div class="mb-3" style="display:none;">
-        <label>Id:</label>
-        <input class="form-control" type="text" name="DogId" value="@Model.SelectedDog.DogId" />
-    </div>
-    <div class="mb-3">
-        <label class="form-label">Name:</label>
-        <input class="form-control" type="text" name="DogName" value="@Model.SelectedDog.DogName" />
-    </div>
-    <div class="mb-3">
-        <label class="form-label">Age (years):</label>
-        <input class="form-control" type="number" name="DogAge" value="@Model.SelectedDog.DogAge" />
-    </div>
-    <div class="mb-3">
-        <label class="form-label">Breed:</label>
-        <input class="form-control" type="text" name="DogBreed" value="@Model.SelectedDog.DogBreed" />
-    </div>
-    <div class="mb-3">
-        <label class="form-label">Birthday:</label>
-        <input class="form-control" type="date" name="DogBirthday" value="@Model.SelectedDog.DogBirthday.ToString("yyyy-MM-dd")" />
-    </div>
-    <div class="mb-3">
-        <label class="form-label">Owner</label>
-        <select class="form-select" name="EmployeeId">
-            @foreach (var employee in Model.EmployeeOptions)
-            {
-                string selected = "";
-                if (employee.EmployeeId == Model.SelectedDog.EmployeeId)
-                {
-                    selected = "selected";
-                }
-                <option value="@employee.EmployeeId" @selected>@employee.FirstName @employee.LastName</option>
+<div class="row">
+    <div class="col-md-6">
+        <form action="/Dog/Update" method="post">
+            <div class="mb-3" style="display:none;">
+                <label>Id:</label>
+                <input class="form-control" type="text" name="DogId" value="@Model.SelectedDog.DogId" />
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Name:</label>
+                <input class="form-control" type="text" name="DogName" value="@Model.SelectedDog.DogName" />
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Age (years):</label>
+                <input class="form-control" type="number" name="DogAge" value="@Model.SelectedDog.DogAge" />
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Breed:</label>
+                <input class="form-control" type="text" name="DogBreed" value="@Model.SelectedDog.DogBreed" />
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Birthday:</label>
+                <input class="form-control" type="date" name="DogBirthday" value="@Model.SelectedDog.DogBirthday.ToString("yyyy-MM-dd")" />
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Owner</label>
+                <select class="form-select" name="EmployeeId">
+                    @foreach (var employee in Model.EmployeeOptions)
+                    {
+                        string selected = "";
+                        if (employee.EmployeeId == Model.SelectedDog.EmployeeId)
+                        {
+                            selected = "selected";
+                        }
+                        <option value="@employee.EmployeeId" @selected>@employee.FirstName @employee.LastName</option>
 
-            }
-        </select>
+                    }
+                </select>
+            </div>
+            <input class="btn btn-secondary" type="submit" value="Update Your Pup" />
+        </form>
     </div>
-    <input type="submit" value="Update your Pup" />
-</form>
-
-    <div class="col">
+    <div class="col-md-6 mt-4 mt-md-0">
         <div>
             <h3 class="fw-semibold">List of  Tricks learnt By Dog</h3>
             @foreach (var trick in Model.TricksLearnt)
             {
-                <a href="/Trick/Details/@trick.TrickId">@trick.TrickName</a>
-                <form action="/Dog/UnAssociate" method="post" style="display:inline;">
-                    <input type="hidden" name="DogId" value="@Model.SelectedDog.DogId" />
-                    <input type="hidden" name="TrickId" value="@trick.TrickId" />&nbsp;&nbsp;
-                    <button type="submit" style="background-color:red; color:white; border:none; cursor:pointer;">Cancel</button>
-                </form>
-                <br />
-                <br />
-
+                <div class="alert alert-light">
+                    <a href="/Trick/Details/@trick.TrickId"><strong>@trick.TrickName</strong></a>
+                    <form action="/Dog/UnAssociate" method="post" style="display:inline;">
+                        <input type="hidden" name="DogId" value="@Model.SelectedDog.DogId" />
+                        <input type="hidden" name="TrickId" value="@trick.TrickId" />&nbsp;&nbsp;
+                        <button type="submit" style="cursor:pointer;" class="rounded-pill text-light border-0 px-3 py-1 bg-danger">Remove</button>
+                    </form>
+                </div>
             }
-            <br />
         </div>
-        <br />
         <div>
             <h3 class="fw-semibold">Add  New tricks - @Model.SelectedDog.DogName</h3>
-            <form method="post" action="/Dog/Associate">
+            <form method="post" action="/Dog/Associate" class="d-flex flex-wrap">
                 <input type="hidden" name="DogId" value="@Model.SelectedDog.DogId" />
-                <select name="TrickId">
+                <select class="form-select w-50" name="TrickId">
                     @foreach (var trick in Model.AvailableTrickOptions)
                     {
                         <option value="@trick.TrickId">
@@ -77,15 +76,9 @@
 
                     }
                 </select>
-                <input type="submit" value="Add Trick" class="btn btn-success ms-3" style="background-color:orangered; color:white" />
+                <input type="submit" value="Add Trick" class="btn btn-outline-secondary ms-2" />
             </form>
 
         </div>
     </div>
-
-
-
-
-
-
-
+</div>

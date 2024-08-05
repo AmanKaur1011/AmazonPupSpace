@@ -3,12 +3,10 @@
     ViewBag.Title = "New";
 }
 
-<h2  class="text-center display-4">Add your Pup</h2>
-<a class="d-inline-flex focus-ring py-1 px-2 text-decoration-none border rounded-2 mb-4" href="/Employee/List" href="/Dog/List">Cancel</a>
-    <div class="container-fluid">
-        <div class="container ">
+<h2  class="mb-4">Add your Pup</h2>
+<a href="/Dog/List" class="btn btn-lg btn-info mb-4"><i class="fa-solid fa-chevron-left p-2 me-2"></i>Go back to list</a>
             <div class="row">
-                <div class="col-md-6 mx-auto">
+                <div class="col-md-6">
                     <form action="/Dog/Create" method="post">
                         <div class="mb-3">
                             <label class="form-label">Name:</label>
@@ -36,10 +34,7 @@
                                 }
                             </select>
                             </div>
-                            <input type="submit" value="Add your Pup" />
+                            <input class="btn btn-secondary" type="submit" value="Add your Pup" />
                     </form>
-
-                </div>
-            </div>
         </div>
     </div>

@@ -3,11 +3,11 @@
     ViewBag.Title = "DeleteConfirm";
 }
 
-<a href="/Dog/Details/@Model.DogId">Cancel</a>
-
 <h2>Are you sure you want to delete @Model.DogName?</h2>
-<p>This action cannot be undone</p>
-
-<form action="/Dog/Delete/@Model.DogId" method="post">
-    <button type="submit">Confirm Delete</button>
-</form>
+<p class="alert alert-warning w-auto">This action cannot be undone</p>
+<div class="d-flex align-items-center mt-4">
+    <a href="/Dog/Details/@Model.DogId" class="btn btn-danger  me-2 mb-2">Cancel</a>
+    <form action="/Dog/Delete/@Model.DogId" method="POST">
+        <input class="btn btn-success mb-2" type="submit" value="Confirm Delete" />
+    </form>
+</div>

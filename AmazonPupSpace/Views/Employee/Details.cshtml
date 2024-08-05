@@ -17,14 +17,14 @@
                 <img class="img-fluid rounded-2" src="~/Content/Images/hero.png" alt="@Model.SelectedEmployee.FirstName-@Model.SelectedEmployee.LastName" />
             </div>
             <div class="post-info col-12 col-md-6 col-lg-7">
-                <p class="mb-2 fs-4"><strong>First Name : </strong>@Model.SelectedEmployee.FirstName </p>
-                <p class="mb-2 fs-4"><strong>Last Name : </strong>@Model.SelectedEmployee.LastName </p>
-                <p class="mb-2 fs-4"><strong>Email : </strong>@Model.SelectedEmployee.Email </p>
-                <p class="mb-2 fs-4"><strong>Employee Id : </strong>@Model.SelectedEmployee.EmployeeId </p>
-                <p class="mb-2 fs-4"><strong>Hire Date : </strong>@Model.SelectedEmployee.HireDate </p>
-                <p class="mb-2 fs-4"><strong>Department Name : </strong>@Model.SelectedEmployee.DepartmentName </p>
-                <div class="mt-3">
-                    <h3> Dogs Owned by the Employee</h3>
+                <p class="mb-2 fs-6"><strong>First Name : </strong>@Model.SelectedEmployee.FirstName </p>
+                <p class="mb-2 fs-6"><strong>Last Name : </strong>@Model.SelectedEmployee.LastName </p>
+                <p class="mb-2 fs-6"><strong>Email : </strong>@Model.SelectedEmployee.Email </p>
+                <p class="mb-2 fs-6"><strong>Employee Id : </strong>@Model.SelectedEmployee.EmployeeId </p>
+                <p class="mb-2 fs-6"><strong>Hire Date : </strong>@Model.SelectedEmployee.HireDate.ToString("MMMM dd, yyyy") </p>
+                <p class="mb-2 fs-6"><strong>Department Name : </strong>@Model.SelectedEmployee.DepartmentName </p>
+                <div class="bg-body-secondary p-3 rounded-2 mt-3">
+                    <h3 class="fs-4"> Dogs Owned by the Employee</h3>
                     @foreach (var dog in Model.RelatedDogs)
                     {
                         <a class=" fs-5 link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover" href="/Dog/Details/@dog.DogId">@dog.DogName (Breed - @dog.DogBreed ) </a>

@@ -8,12 +8,12 @@
     <div class="row">
         @foreach (var employee in Model)
         {
-            <div class="col-12 col-md-6 col-lg-4">
+            <div class="employee-card-block col-12 col-md-6 col-lg-4">
                 <a class="employee-card rounded-4" href="/Employee/Details/@employee.EmployeeId">
                     <div class="card text-center p-3 rounded-4 ">
                         <div class="card-body">
                             <h4 class="card-title text-capitalize">@employee.FirstName @employee.LastName</h4>
-                            <small class="text-light-emphasis">@employee.HireDate</small>
+                            <small class="text-light-emphasis">@employee.HireDate.ToString("MMMM dd, yyyy")</small>
                         </div>
                     </div>
                 </a>

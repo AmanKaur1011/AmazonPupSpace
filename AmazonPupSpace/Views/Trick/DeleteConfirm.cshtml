@@ -3,11 +3,13 @@
     ViewBag.Title = "DeleteConfirm";
 }
 
-<a href="/Trick/Details/@Model.TrickId">Cancel</a>
 
-<h2>Are you sure you want to delete @Model.TrickName?</h2>
-<p>This action cannot be undone</p>
+<h2>Are you sure you want to delete the trick; @Model.TrickName?</h2>
+<p class="alert alert-warning w-auto">This action cannot be undone</p>
 
-<form action="/Trick/Delete/@Model.TrickId" method="post">
-    <button type="submit">Confirm Delete</button>
-</form>
+<div class="d-flex align-items-center">
+    <a href="/Trick/Details/@Model.TrickId" class="btn btn-danger  me-2 mb-2">Cancel</a>
+    <form action="/Trick/Delete/@Model.TrickId" method="POST">
+        <input type="submit" value="Confirm Delete" class="btn btn-success mb-2" />
+    </form>
+</div>

@@ -32,7 +32,7 @@
                 <div class="card-body">
                     <h4 class="card-title">@post.Title</h4>
                     <p class="card-text truncate-overflow">@post.Caption</p>
-                    <p class="card-text card-text-one"><small class="text-muted">@post.PostDate</small></p>
+                    <p class="card-text card-text-one"><small class="text-muted">@post.PostDate.ToString("MMMM dd, yyyy")</small></p>
                     <a href="/Post/Details/@post.PostId" class="btn btn-outline-secondary"><span>View details</span><i class="fa-solid fa-arrow-right"></i></a>
                 </div>
             </div>

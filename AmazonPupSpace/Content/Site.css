@@ -417,6 +417,16 @@ a {
     padding-right: 20px;
 }
 
+.right {
+    position: relative;
+}
+
+#myDiv {
+    list-style: none;
+    position: absolute;
+    right: 0;
+}
+
 @media only screen and (max-width: 992px) {
     .grid .card-item {
         width: 50%;

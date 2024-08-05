@@ -14,13 +14,13 @@
         }
     }
     <img class="img-fluid rounded-2" src="@imageurl" alt="@Model.Title" />
-    <div class="card-body">
+    <div class="card-body mt-3">
         <p class="card-text mb-2"><strong>Commented By:</strong> @Model.FirstName @Model.LastName</p>
         <p class="card-text mb-2"><strong>Art Title:</strong> @Model.Title</p>
         <p class="card-text mb-2"><strong>Comment:</strong> @Model.CommentText</p>
         <p class="card-text mb-2"><strong>Date Commented:</strong> @Model.DateCommented.ToString()</p>
         <div class="d-flex mt-4">
-            <a href="/Comment/List" class="btn btn-outline-danger me-3">Cancel</a>
+            <a href="/Post/Details/@Model.PostId" class="btn btn-outline-danger me-3">Cancel</a>
             <form action="/Comment/Delete/@Model.CommentId" method="POST">
                 <input type="submit" value="Confirm Delete" class="btn btn-success" />
             </form>

@@ -14,21 +14,28 @@
                         imageurl = "/Content/Images/Posts/" + Model.Post.PostId + "." + Model.Post.PicExtension;
                     }
                 }
-                <img id="post-img" class="img-fluid rounded-2" src="@imageurl" alt="@Model.Post.Title" />
+                <img id="post-img" class="img-fluid" src="@imageurl" alt="@Model.Post.Title" />
             </div>
             <div id="post-info" class="post-info d-flex flex-column col-12 col-md-5 mt-4 mt-md-0">
                 <div class="flex-shrink-0 p-3 border-bottom">
-                    <h3 class="fs-6 fw-bold mb-0">@Model.Employee.FirstName @Model.Employee.LastName</h3>
-                    <small>@Model.Post.PostDate.ToString()</small>
-                    <h4 class="fs-6 fw-bold mb-0 mt-2">@Model.Post.Title</h4>
-                    <p class="mb-0">@Model.Post.Caption</p>
-                    @if (User.Identity.IsAuthenticated)
-                    {
-                        <div class="d-flex align-items-center">
-                            <a href="/Post/Edit/@Model.Post.PostId" class="btn btn-warning me-2 mb-2">Update</a>
-                            <a href="/Post/DeleteConfirm/@Model.Post.PostId" class="btn btn-danger mb-2">Delete</a>
+                    <div class="d-flex justify-content-between">
+                        <div class="left">
+                            <h3 class="fs-6 fw-bold mb-0">@Model.Employee.FirstName @Model.Employee.LastName</h3>
+                            <small>@Model.Post.PostDate.ToString("MMMM dd, yyyy")</small>
+                            <h4 class="fs-6 fw-bold mb-0 mt-2">@Model.Post.Title</h4>
+                            <p class="mb-0">@Model.Post.Caption</p>
                         </div>
-                    }
+                        <div class="right">
+                            <button class="border-0 rounded-2 py-2 bg-light-subtle" onclick="myFunction()"><i class="fa-solid fa-ellipsis-vertical"></i></button>
+                            <ul id="myDiv" class="ps-0 bg-light mb-0 rounded-2 shadow" style="display:none;">
+                                @if (User.Identity.IsAuthenticated)
+                                {
+                                    <li class="px-3 py-2 border-bottom"><a href="/Post/Edit/@Model.Post.PostId"><small>Update</small></a></li>
+                                    <li class="px-3 py-2"><a href="/Post/DeleteConfirm/@Model.Post.PostId"><small>Delete</small></a></li>
+                                }
+                            </ul>
+                        </div>
+                    </div>
                 </div>
                 <div class="comment-block p-3">
                     <div class="comment-list">
@@ -43,7 +50,7 @@
                                                 <h5 class="card-title fs-6 fw-bold me-2 mb-0"><a href="/Employee/Details/@comment.EmployeeId">@comment.FirstName @comment.LastName</a></h5>
                                                 <p class="card-text fs-6">@comment.CommentText</p>
                                             </div>
-                                            <small class="card-subtitle mb-4 text-body-secondary"><small><i class="fa-regular fa-calendar-days me-2"></i> @comment.DateCommented</small></small>
+                                            <small class="card-subtitle mb-4 text-body-secondary"><small><i class="fa-regular fa-calendar-days me-2"></i> @comment.DateCommented.ToString("MMMM dd, yyyy")</small></small>
                                         </div>
                                         @if (User.Identity.IsAuthenticated)
                                         {
@@ -69,7 +76,7 @@
                             <div class="d-flex flex-wrap">
                                 <label for="CommentText" class="mb-2 d-none">Your Comment:</label>
                                 <textarea class="form-control w-auto flex-grow-1 me-2" name="CommentText" rows="1" required></textarea>
-                                <button type="submit" class="btn btn-dark">Post</button>
+                                <button type="submit" class="btn btn-dark rounded-5">Post</button>
                             </div>
                         </form>
                     }
@@ -97,5 +104,14 @@
         var leftImageHeight = document.getElementById('post-img').clientHeight;
         document.getElementById('post-info').style.height = leftImageHeight + 'px';
     };
+
+    function myFunction() {
+        var x = document.getElementById("myDiv");
+        if (x.style.display === "none") {
+            x.style.display = "block";
+        } else {
+            x.style.display = "none";
+        }
+    }
 
 </script>

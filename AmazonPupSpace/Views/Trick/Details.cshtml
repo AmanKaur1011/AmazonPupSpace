@@ -6,20 +6,24 @@
 @{
     var formatttedVideoLink = "";
 
-    if (@Model.TrickVideoLink.Contains("youtube")) {
+    if (@Model.TrickVideoLink.Contains("youtube"))
+    {
         formatttedVideoLink = @Model.TrickVideoLink.Replace("watch?v=", "embed/");
-     }
-            else{
-       ;formatttedVideoLink = Model.TrickVideoLink;
+    }
+    else
+    {
+        ; formatttedVideoLink = Model.TrickVideoLink;
     }
 }
-<a href="/Trick/Update/@Model.TrickId" class="navbar-link">Update</a>
-<a href="/Trick/DeleteConfirm/@Model.TrickId" class="navbar-link">Delete</a>
-<a href="/Trick/List">Go back to Trick List</a>
-<h2>@Model.TrickName</h2>
-<h3>Description</h3>
-<p> @Model.TrickDescription</p>
-<p>difficulty: @Model.TrickDifficulty</p>
-<iframe src="@formatttedVideoLink" width="500" height="300"style="border: 1px solid black;"></iframe>
+<a href="/Trick/List" class="btn btn-lg btn-info mb-4"><i class="fa-solid fa-chevron-left p-2 me-2"></i>Go back to Trick List</a>
 
+<h2 class="mb-3">@Model.TrickName</h2>
+<h3 class="fs-4">Description</h3>
+<p> @Model.TrickDescription</p>
+<p><strong>Difficulty:</strong> @Model.TrickDifficulty</p>
+<iframe src="@formatttedVideoLink" width="500" height="300" style="border: 1px solid black;"></iframe>
+<div class="d-flex align-items-center mt-3">
+    <a href="/Trick/Update/@Model.TrickId" class="btn btn-warning me-2 mb-2">Update Trick</a>
+    <a href="/Trick/DeleteConfirm/@Model.TrickId" class="btn btn-danger mb-2">Delete Trick</a>
+</div>
 
