@@ -19,6 +19,7 @@ AmazonPupSpace is a fun and engaging application designed exclusively for Amazon
 - **Commenting**: Comment on other employees’ posts to show your appreciation and interact.
 - **Image Upload**: Easily upload and display images of your dog performing tricks.
 - **Admin**: CRUD for employees, departments, dogs, tricks
+- **Roles**: Super admin has access to CRUD operations for everything except user posts. Logged-in Users are the only ones with CRUD access for posts and the comments on their posts 
 
 ## Getting Started
 
