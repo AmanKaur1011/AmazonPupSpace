@@ -96,6 +96,7 @@ namespace AmazonPupSpace.Controllers
                 EmployeeId = post.Employee.EmployeeId,
                 FirstName = post.Employee.FirstName,
                 LastName = post.Employee.LastName,
+                Email = post.Employee.Email
             };
 
             return Ok(postDto);

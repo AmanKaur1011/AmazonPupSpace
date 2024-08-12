@@ -76,7 +76,8 @@ namespace AmazonPupSpace.Controllers
                 ViewModel.Employee = new Employee
                 {
                     FirstName = postDto.FirstName,
-                    LastName = postDto.LastName
+                    LastName = postDto.LastName,
+                    Email = postDto.Email
                 };
             }
             else
