@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Net.Http;
+using System.Security.Permissions;
 using System.Text;
 using System.Web;
 using System.Web.Mvc;
@@ -12,6 +13,7 @@ using AmazonPupSpace.Models.ViewModels;
 
 namespace AmazonPupSpace.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class EmployeeController : Controller
     {
         private static readonly HttpClient client;
@@ -127,6 +129,7 @@ namespace AmazonPupSpace.Controllers
         /// </returns>
         /// <example>  GET: Employee/New => New View => (this webpage gives a form with an empty input fields where new user's information can be filled)
         /// </example>
+        [PrincipalPermission(SecurityAction.Demand, Name = "marko@mail.com")]
         public ActionResult New()
         {
             AddEmployee ViewModel = new AddEmployee();
@@ -151,11 +154,11 @@ namespace AmazonPupSpace.Controllers
         /// FORM DATA: Employee JASON Object
         /// </example>
         [HttpPost]
-        public ActionResult Create(Employee employee)
+        public ActionResult Create(Employee employee, string EmailLocalPart)
         {
+            // Concatenate the local part of the email with the domain
+            employee.Email = $"{EmailLocalPart}@amazon.ca";
             string url = "EmployeeData/AddEmployee";
-
-
             string jsonpayload = jss.Serialize(employee);
 
             Debug.WriteLine(jsonpayload);
