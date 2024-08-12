@@ -28,16 +28,17 @@
                                 <h4 class="fs-6 fw-bold mb-0 mt-2">@Model.Post.Title</h4>
                                 <p class="mb-0">@Model.Post.Caption</p>
                             </div>
-                            <div class="right">
-                                <button class="border-0 rounded-2 py-2 bg-light-subtle" onclick="myFunction()"><i class="fa-solid fa-ellipsis-vertical"></i></button>
-                                <ul id="myDiv" class="ps-0 bg-light mb-0 rounded-2 shadow" style="display:none;">
-                                    @if (User.Identity.IsAuthenticated)
-                                    {
+                            @if (User.Identity.IsAuthenticated && Model.Employee.Email == User.Identity.Name)
+                            {
+                            //checks if the employee who posted this post is logged in, only then can theyedit or delte their post
+                                <div class="right">
+                                    <button class="border-0 rounded-2 py-2 bg-light-subtle" onclick="myFunction()"><i class="fa-solid fa-ellipsis-vertical"></i></button>
+                                    <ul id="myDiv" class="ps-0 bg-light mb-0 rounded-2 shadow" style="display:none;">
                                         <li class="px-3 py-2 border-bottom"><a href="/Post/Edit/@Model.Post.PostId"><small>Update</small></a></li>
                                         <li class="px-3 py-2"><a href="/Post/DeleteConfirm/@Model.Post.PostId"><small>Delete</small></a></li>
-                                    }
-                                </ul>
-                            </div>
+                                    </ul>
+                                </div>
+                            }
                         </div>
                     </div>
                     <div class="comment-block p-3">
@@ -58,6 +59,7 @@
 
                                             @if (User.Identity.IsAuthenticated)
                                             {
+                                            //checks if the employee who posted this post is logged in, only then can they delete comments on their post
                                                 if (Model.Employee.Email == User.Identity.Name)
                                                 {
                                                     <a href="/Comment/DeleteConfirm/@comment.CommentId" class="btn btn-danger px-3 py-2"><i class="fa-solid fa-trash-can"></i></a>
