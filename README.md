@@ -4,6 +4,8 @@ Welcome to **AmazonPupSpace**! 🎉🐾
 
 AmazonPupSpace is a fun and engaging application designed exclusively for Amazon employees to share their beloved dogs and the amazing tricks they learn. Whether your dog can roll over, fetch, or perform a high-five, this is the perfect place to showcase their talents and connect with fellow co-workers who just happen to be dog lovers.
 
+![Screenshot 2024-09-30 051730](https://github.com/user-attachments/assets/4c68ee7a-7e63-4619-af65-6488416484b1)
+
 ## Table of Contents
 1. [Features](#features)
 2. [Getting Started](#getting-started)
